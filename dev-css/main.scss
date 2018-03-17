@@ -1,0 +1,41 @@
+/* colors */
+$dark_gray: #58585b;
+$a11y_gray: #767676;
+$blue: #051839;
+$green: #346633;
+$gold: #c7922b;
+$teal: #4f8190;
+$light_blue: lighten($blue, 50%);
+
+$secondary_1: darken(#99ccff, 10%);
+$secondary_2: darken(#ccffcc, 55%);
+$secondary_3: #cc9966;
+$secondary_4: lighten(#330000, 20%);
+$secondary_5: light(#336633, 20%);
+
+/* Overides not necessary on production */
+
+html {
+	font-family: calluna, "Calluna W01",Georgia,"Times New Roman","DejaVu Serif",serif;
+}
+
+.list-item__tags a, .list-item__tag, .tags-list li a, .tag--rail, .subtopics-list__item a, .tag, h1, h2, h3, h4, h5, h6, label, .button--secondary-full, .button--tertiary-full, .button--full, .button--secondary-small, .button--tertiary-small, .list-filter .views-submit-button input[type="submit"], .list-filter__button input[type="submit"], .button--small, .button--secondary, .button--tertiary, button, .button--quarternary, .form-submit, .search-form input[type="submit"], .button, .tabs-primary__tab, .download-label--pdf, .download-label--link, .download-label--img, .download-label, .hero__label--blog, .hero__label--work, .hero__label--media-highlights, .hero__label, .label--work, .label--publication, .label--publications, .label--press-release, .label--press-releases, .label--blog-post, .label--blog-posts, .label--event, .label--magazine, .list-item__label, .list-item--work__label, .list-item--publication__label, .list-item--publications__label, .list-item--collection__label, .list-item--blog-post__label, .list-item--blog-posts__label, .list-item--event__label, .list-item--magazine__label, .list-item--resources-magazine__label, .label, .list-filter, .list-filter--rail, .researcher-list-item__subtitle, .issue-meta, .media-highlight__title, .nav__list-item, .nav-mega .menu li a:link, .nav-mega__list li a:link, .nav-mega .menu li a:visited, .nav-mega__list li a:visited, .mega-summary__contact-info, .mega-summary__phone, .summary__social, .mobile-nav__trigger, .mobile-nav .nav-mega, .mobile-nav__list-item-link, .nav--rail, .pagination, .rail--magazine__issue, .rail--magazine__list li, .social-list--header li, .social-list li, .social-label, .rss-feed, .topics-rss-feed, .collections-list li, .topics-navigation__list, .work-callout__number, .work--meta__title, .work--meta__collection {
+	font-family: "Trade Gothic Pro Roman", "TradeGothic LT", "Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Trade Gothic Pro Bold",	
+} 
+
+#mfPreviewBar {
+	display: none;
+}
+
+/* end*/
+
+.placeholder {
+	border: 1px solid cyan;
+	&::after {
+		content: 'placeholder';
+	}
+}
