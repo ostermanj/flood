@@ -8,6 +8,12 @@ import { d3Tip } from '../js-vendor/d3-tip';
 import { createBrowseButton } from '../js-exports/BrowseButtons';
 import { createResultItem } from '../js-exports/ResultItems'; 
 */
+
+/*
+to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
+
+
+*/
 window.theMap  = (function(){   
 "use strict";  
     mapboxgl.accessToken = 'pk.eyJ1Ijoib3N0ZXJtYW5qIiwiYSI6ImNpdnU5dHVndjA2eDYyb3A3Nng1cGJ3ZXoifQ.Xo_k-kzGfYX_Yo_RDcHDBg';
@@ -32,22 +38,37 @@ window.theMap  = (function(){
 			    	"name": "policies",
 			        "type": "geojson",
 			        "data": geoJSONData,
-			      /*  "cluster": true,
+			        "cluster": true,
 			        "clusterMaxZoom": 14, // Max zoom to cluster points on
-			        "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)*/
+			        "clusterRadius": 25 // Radius of each cluster when clustering points (defaults to 50)
 			    }, [ // layers
 			        { // layer one
 			            "id": "clusters",
 			            "type": "circle",
 			            "source": "policies",
-			           // "filter": ["has","point_count"],
+			            "filter": ["has","point_count"],
 			            "paint": {
-			              	"circle-color": "#ff0000",
-				            "circle-radius": 1,
-				            "circle-opacity": 0.2
+			              	 "circle-color": [
+				                "step",
+				                ["get", "point_count"],
+				                "#51bbd6",
+				                100,
+				                "#f1f075",
+				                750,
+				                "#f28cb1"
+				            ],
+				            "circle-radius": [
+				                "step",
+				                ["get", "point_count"],
+				                20,
+				                100,
+				                30,
+				                750,
+				                40
+				            ]
 			            },
 			            "beforeLayer": "water" // <== this is different from mapbox native specs
-			        }/*,
+			        },
 			        { // layer two
 			            id: "cluster-count",
 				        type: "symbol",
@@ -69,7 +90,7 @@ window.theMap  = (function(){
 				            "circle-stroke-width": 1,
 				            "circle-stroke-color": "#fff"
 				        }
-			        }*/
+			        }
 		        ] // end layers array
 		    ); // end addlayers
 
