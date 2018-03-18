@@ -28,9 +28,11 @@ module.exports = function(grunt){
               esversion: 6,
               eqnull: true,
               browser: true,
+              node: true,
               devel: true,
               globals: {
                 d3:true,
+                mapboxgl:true
               },
               undef: true,
               unused: true

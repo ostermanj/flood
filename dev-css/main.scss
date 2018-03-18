@@ -39,3 +39,17 @@ h1, h2, h3, h4, h5, h6 {
 		content: 'placeholder';
 	}
 }
+
+.responsive-container {
+	position: relative;
+	padding-bottom: 56.25%;
+	height: 0;
+	overflow: hidden;
+	> div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
