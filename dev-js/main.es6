@@ -33,20 +33,64 @@ window.theMap  = (function(){
 		toGeoJSON('cen_policy-simplified.csv');
 		
 		function go(geoJSONData){
-			var addLayers = mbHelper.addSourceAndLayers.call(theMap,
+			console.log(geoJSONData);
+			var addPointLayers = mbHelper.addSourceAndLayers.call(theMap,
+				{ // source
+					/*"name": "policy-points",
+					"type": "vector",
+					"url": "mapbox://ostermanj.2busm34d"*/
+					"name": "policy-points",
+			        "type": "geojson",
+			        "data": geoJSONData
+				}, [ // layers
+					{ // layer zero
+		            "id": "points",
+		            "type": "circle",
+		            "source": "policy-points",
+		         //   "source-layer": "policies",
+		            //"maxzoom": 5.25,
+		           // "filter": ["has","point_count"],
+		            "paint": {
+		              	"circle-color": [
+			                'match',
+			                ['get', 't_ded'],
+			                '5', '#000033',
+			               /* 4, '#cc9966',
+			                3, '#cc9966',
+			                2, '#cc6600',
+			             //   1.5, '#cc6600',
+			             //   1.25, '#99000',
+			                1, '#990000',
+			                
+			                /* other */ '#990000'
+			            ],
+			            "circle-radius": {
+			            	
+			                'stops': [[5, 3], [8, 18]]
+			            },
+			            "circle-opacity": 0.1
+			            }
+			        }
+				]
+			);
+			var addClusteredLayers = mbHelper.addSourceAndLayers.call(theMap,
 			    { // source
+
+
 			    	"name": "policies",
 			        "type": "geojson",
 			        "data": geoJSONData,
 			        "cluster": true,
-			        "clusterMaxZoom": 14, // Max zoom to cluster points on
-			        "clusterRadius": 25 // Radius of each cluster when clustering points (defaults to 50)
+			        //"clusterMaxZoom": 14, // Max zoom to cluster points on
+			        "clusterRadius": 0.5 // Radius of each cluster when clustering points (defaults to 50)
 			    }, [ // layers
-			        { // layer one
+
+			       /* { // layer one
 			            "id": "clusters",
 			            "type": "circle",
 			            "source": "policies",
 			            "filter": ["has","point_count"],
+			            "minzoom": 5.25,
 			            "paint": {
 			              	 "circle-color": [
 				                "step",
@@ -66,36 +110,49 @@ window.theMap  = (function(){
 				                750,
 				                40
 				            ]
-			            },
-			            "beforeLayer": "water" // <== this is different from mapbox native specs
-			        },
-			        { // layer two
+			            }
+			        },*/
+			       { // layer two
 			            id: "cluster-count",
 				        type: "symbol",
 				        source: "policies",
 				        filter: ["has", "point_count"],
+				        "minzoom": 5.25,
 				        layout: {
 				            "text-field": "{point_count_abbreviated}",
-				            "text-size": 12
+				            "text-size": 12,
+
+				        },
+				        "paint": {
+				        	"text-color": "#ffffff"
 				        }
-			        },
-			        { // layer three
+			        }
+			   /*     { // layer three
 			        	id: "unclustered-point",
 				        type: "circle",
 				        source: "policies",
 				        filter: ["!has", "point_count"],
-				        paint: {
-				            "circle-color": "#11b4da",
-				            "circle-radius": 4,
-				            "circle-stroke-width": 1,
-				            "circle-stroke-color": "#fff"
-				        }
-			        }
+				        "minzoom": 5.25,
+			            "paint": {
+			              	"circle-color": [
+				                'match',
+				                ['get', 't_ded'],
+				                '5', '#000033',
+				 /               /* other */ /*'#990000'
+				            ],
+				            "circle-radius": {
+				            	'base': 3,
+				                'stops': [[6, 4], [22, 180]]
+					            },
+				            "circle-opacity": 0.85
+				            }
+				        }*/
 		        ] // end layers array
 		    ); // end addlayers
 
-		    addLayers.then(() => { console.log('added');});
-		} // end continue
+		   addClusteredLayers.then(() => { console.log('cluster layers added');});
+		   addPointLayers.then(() => { console.log('cluster layers added');});
+		} // end go()  
 		function toGeoJSON(url){
 			
 			d3.csv(url, function(err, data){
@@ -124,7 +181,9 @@ window.theMap  = (function(){
 		} // end toGeoJSON
 	}); // end on load
 
-	
+	 theMap.on("mousemove", "clusters", function(e) {
+        console.log(e);
+    });
 
 	return theMap;
    
