@@ -48,13 +48,13 @@ window.theMap  = (function(){
 		            "type": "circle",
 		            "source": "policy-points",
 		         //   "source-layer": "policies",
-		            //"maxzoom": 5.25,
+		            "maxzoom": 9,
 		           // "filter": ["has","point_count"],
 		            "paint": {
 		              	"circle-color": [
 			                'match',
 			                ['get', 't_ded'],
-			                '5', '#000033',
+			                5, '#000033',
 			               /* 4, '#cc9966',
 			                3, '#cc9966',
 			                2, '#cc6600',
@@ -67,6 +67,38 @@ window.theMap  = (function(){
 			            "circle-radius": {
 			            	
 			                'stops': [[5, 3], [8, 18]]
+			            },
+			            "circle-opacity": 0.1
+			            }
+			        },
+			        { // layer one
+		            "id": "points-data-driven",
+		            "type": "circle",
+		            "source": "policy-points",
+		         //   "source-layer": "policies",
+		            "minzoom": 9,
+		           // "filter": ["has","point_count"],
+		            "paint": {
+		              	"circle-color": [
+			                'match',
+			                ['get', 't_ded'],
+			                5, '#000033',
+			               /* 4, '#cc9966',
+			                3, '#cc9966',
+			                2, '#cc6600',
+			             //   1.5, '#cc6600',
+			             //   1.25, '#99000',
+			                1, '#990000',
+			                
+			                /* other */ '#990000'
+			            ],
+			            "circle-radius": {
+			            	property: 'value',
+			                type: 'exponential',
+					        stops: [
+					          [60, 5],
+					          [250, 40]
+					        ]
 			            },
 			            "circle-opacity": 0.1
 			            }
@@ -162,9 +194,15 @@ window.theMap  = (function(){
 				//console.log(data);
 				var features = [];
 				data.forEach(each => {
+					var coerced = {};
+					for ( var key in each ) {
+						if ( each.hasOwnProperty(key) ){
+							coerced[key] = !isNaN(+each[key]) ? +each[key] : each[key];
+						}
+					}
 					features.push({
 						"type": "Feature",
-						"properties": each,
+						"properties": coerced,
 						"geometry": {
 							"type": "Point",
 							"coordinates": [+each.longitude, +each.latitude]
@@ -181,7 +219,7 @@ window.theMap  = (function(){
 		} // end toGeoJSON
 	}); // end on load
 
-	 theMap.on("mousemove", "clusters", function(e) {
+	 theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);
     });
 
