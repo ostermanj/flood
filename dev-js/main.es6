@@ -21,7 +21,7 @@ window.theMap  = (function(){
     mapboxgl.accessToken = 'pk.eyJ1Ijoib3N0ZXJtYW5qIiwiYSI6ImNpdnU5dHVndjA2eDYyb3A3Nng1cGJ3ZXoifQ.Xo_k-kzGfYX_Yo_RDcHDBg';
 
     const mbHelper = require('mapbox-helper');
-   
+   	const theCharts = [];
     var geojson;
     var gateCheck = 0;
     
@@ -163,18 +163,33 @@ window.theMap  = (function(){
 					"geometry": {
 						"type": "Point",
 						"coordinates": [+each.longitude, +each.latitude]
-					}
+					}   
 				});
 			}); // end forEach
 			geojson =  {
 				"type": "FeatureCollection",
 				"features": features
 			};
-			gateCheck++;
+			gateCheck++;  
 			gate();
 			//addClusterLayers(rtn);
 			
-			Charts.createCharts(geojson);
+			theCharts.push(
+				new Charts.Donut({
+					margin: { // percentages
+		                top: 15,
+		                right: 10,
+		                bottom: 5,
+		                left: 10
+		            },
+		            heightToWidth: 1,
+		            container: '#chart-0',
+		            data: geojson.features,
+		            comparator: function(each){
+		            	return each.properties.t_ded < 5;
+		            }
+				})
+			);
 		}); // end d3 csv
 	} // end toGeoJSON
 	var featuresInView = {
@@ -184,7 +199,7 @@ window.theMap  = (function(){
 				.append('svg')
 				.attr('width', '100%')
 	            .attr('xmlns','http://www.w3.org/2000/svg')
-	            .attr('version','1.1')
+	            .attr('version','1.1') 
 	            .attr('viewBox', '0 0 100 3');
 
 	        this.background = this.svg.append('line')
@@ -238,12 +253,15 @@ window.theMap  = (function(){
 		return matchingIDs.size;
 	}
 	theMap.on('moveend', function(){
-		featuresInView.update(countFeatures());	
+		updateAll();
 	});
 	theMap.on('zoomend', function(){
-		featuresInView.update(countFeatures());
-		//checkFeatures();
+		updateAll();
 	});
+	function updateAll(){
+		featuresInView.update(countFeatures());
+		theCharts.forEach(each => each.update(false, matchingIDs));
+	}
 	/*theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);
     });*/

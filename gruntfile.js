@@ -38,7 +38,7 @@ module.exports = function(grunt){
               unused: true
             },
             files: {
-                src: ['dev-js/main.es6']
+                src: ['dev-js/main.es6','js-exports/Charts.js']
             }
 
         },
@@ -103,7 +103,7 @@ module.exports = function(grunt){
                 tasks: ['htmlhint']
             },
             js: {
-                files: ['dev-js/*.es6'],
+                files: ['dev-js/*.es6','js-exports/Charts.js'],
                 tasks: ['jshint','browserify'] // TO DO: ADD UGLIFY ET AL TO BULD TASK
             },
             scss: {

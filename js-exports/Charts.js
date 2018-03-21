@@ -1,6 +1,6 @@
 export const Charts = (function(){
     /* globals d3 */
-    const medianIncomes = new Map();
+   /* const medianIncomes = new Map();
     function createMedianIncomeMap(geojson){
 		geojson.features.forEach(each => {
 			if ( !medianIncomes.has(each.properties.cen_tract) ){
@@ -11,48 +11,9 @@ export const Charts = (function(){
 		console.log(medianIncomes);
 		window.medianIncomes = medianIncomes;
 		//createCharts(geojson);
-	}
-	var createCharts = function(geojson){
-		console.log(geojson);
-		createMedianIncomeMap(geojson);
-
-		new Donut({
-			margin: { // percentages
-                top: 15,
-                right: 10,
-                bottom: 5,
-                left: 10
-            },
-            heightToWidth: 1,
-            container: '#chart-0',
-            data: geojson.features
-		});
-
-	/*	new Donut({
-			margin: { // percentages
-                top: 15,
-                right: 10,
-                bottom: 5,
-                left: 10
-            },
-            heightToWidth: 1,
-            container: '#chart-1',
-            data: [...medianIncomes.values()]
-		});
-
-		new Donut({
-			margin: { // percentages
-                top: 15,
-                right: 10,
-                bottom: 5,
-                left: 10
-            },
-            heightToWidth: 1,
-            container: '#chart-2',
-            data: [...medianIncomes.values()]
-		}); //*/
-	}
-
+	} */
+	
+    var tau = 2 * Math.PI;
 	var Donut = function(configObject){ // margins {}, height #, width #, containerID, dataPath
 	    console.log(this, configObject);
 	    this.setup(configObject);
@@ -63,28 +24,17 @@ export const Charts = (function(){
 	    setup(configObject){
 	    	console.log('in set up');
 	        var viewBox = '0 0 100 ' + Math.round(configObject.heightToWidth * 100);
-	        var tau = 2 * Math.PI;
 	        this.margin = configObject.margin;
 	        this.width = 100 - this.margin.left - this.margin.right;
 	        this.height = configObject.heightToWidth * 100 - this.margin.top - this.margin.bottom;
-	        this.radius = Math.min(this.width,this.height) / 2;
+	        this.radius = Math.min(this.width,this.height) / 3;
 	        this.data = configObject.data;
-	        console.log(this.radius);
+	        this.comparator = configObject.comparator;
+	      
 	        this.arc = d3.arc()
-	          .outerRadius(this.radius)
-	          .innerRadius(this.radius / 2)
+	          .outerRadius(this.radius) 
+	          .innerRadius(this.radius / 1.5)
 	          .startAngle(0); 
-	        window.arc = this.arc;
-	        console.log(this.data);
-	        this.scale = d3.scaleLinear().domain([0,this.data.length]).range([0,1]);
-	        this.value = this.data.length;
-	        //this.y = d3.scaleLinear().domain(d3.range(this.data)).range([this.height, 0]);
- 
-	        
-	       // this.labelOffset = configObject.trendLabelPosition === 'below' ? 4 : -3;
-	       // this.yAxisCount = configObject.yAxisCount;
-	       // this.hasBeenUpdated = false;
-
 
 	        this.svg = d3.select(configObject.container)
 	            .append('svg')
@@ -98,28 +48,65 @@ export const Charts = (function(){
 	    	this.svg.append('path')
 	            .classed('background',true)
 	            .datum({endAngle: tau})
-	            //.style("fill", "#ddd")
 	            .attr('d', this.arc)
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
 
-	        this.svg.append('path')
+	        this.foreground = this.svg.append('path')
+	            .datum({endAngle: tau})
 	            .classed('foreground',true)
-	            .datum({endAngle: this.value * tau})
-	            //.style("fill", "#ddd")
-	            .attr('d', this.arc)
-	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
+	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')')
+	            .attr('d', this.arc);
 
-	         this.svg.append("text")
+	        this.update(true);
+
+	        /* this.svg.append("text")
 	            .attr("text-anchor", "middle")
 	            .attr('class','pie_number')
 	            .attr('y',5)
 	            .text(d3.format(".2s")(this.value))
-	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
+	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');*/
 
-	    }
+	    },
+	    update(isFirstUpdate, matchingIDs){
+	    	var total,
+	    		filteredData,
+	    		numberMatching = 0;
+	    	if ( isFirstUpdate ){
+	    		total = this.data.length;
+	    		this.data.forEach(each => {
+	    			if ( this.comparator(each) ){
+	    				numberMatching++;
+	    			}
+	    		});
+	    	} else {
+	    		console.log(this.data);
+	    		filteredData = this.data.filter(each => matchingIDs.has(each.properties.id));
+	    		total = filteredData.length;
+	    		filteredData.forEach(each => {
+	    			if ( this.comparator(each) ){
+	    				numberMatching++;
+	    			}
+	    		});
+	    	}
+	    	var endAngle = (numberMatching / total) * tau;
+
+	    	this.foreground 
+	    		.transition().duration(500)
+	    		.attrTween('d', this.arcTween(endAngle));
+
+	    },
+	    arcTween(newAngle) { // HT http://bl.ocks.org/mbostock/5100636
+			return d => {
+			    var interpolate = d3.interpolate(d.endAngle, newAngle);
+			    return t => {
+			      d.endAngle = interpolate(t);
+				      return this.arc(d);
+			    };
+			};
+		}
 	};
-
+	
 	return {
-		createCharts
+		Donut
 	};
 }());

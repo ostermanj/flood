@@ -8,6 +8,7 @@ $green: #346633;
 $gold: #c7922b;
 $teal: #4f8190;
 $light_blue: #bfccd7;
+$red: #990000;
 
 $secondary_1: darken(#99ccff, 10%);
 $secondary_2: darken(#ccffcc, 55%);
@@ -62,7 +63,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 path.background {
-	fill: #fff;
+	fill: $blue;
+}
+
+path.foreground {
+	fill:$red;
 }
 
 .donut-div {
