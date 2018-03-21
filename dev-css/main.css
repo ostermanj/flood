@@ -18,17 +18,36 @@ h1, h2, h3, h4, h5, h6 {
   .placeholder::after {
     content: 'placeholder'; }
 
+#map-feature {
+  background: #E2E3E4;
+  margin-bottom: 0.78125em; }
+
 .responsive-container {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
-  overflow: hidden;
-  margin-bottom: 0.78125em; }
+  overflow: hidden; }
   .responsive-container > div {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%; }
+
+path.background {
+  fill: #fff; }
+
+.donut-div {
+  width: 200px; }
+
+/* flex */
+.flex {
+  display: flex; }
+
+.space-between {
+  justify-content: space-between; }
+
+.space-around {
+  justify-content: space-around; }
 
 /*# sourceMappingURL=main.css.map */
