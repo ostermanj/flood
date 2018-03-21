@@ -2,11 +2,12 @@
 $dark_gray: #58585b;
 $a11y_gray: #767676;
 $light_gray: #E2E3E4;
+$medium_gray: #BCBEC0;
 $blue: #051839;
 $green: #346633;
 $gold: #c7922b;
 $teal: #4f8190;
-$light_blue: lighten($blue, 50%);
+$light_blue: #bfccd7;
 
 $secondary_1: darken(#99ccff, 10%);
 $secondary_2: darken(#ccffcc, 55%);
@@ -67,6 +68,31 @@ path.background {
 .donut-div {
 	width: 200px;
 }
+
+div#total-view {
+	position:relative;
+	svg {
+		position: absolute;
+		line {
+			stroke-width: 1px;
+			&.total-line {
+				stroke: $blue;
+			}
+			&.background-line {
+				stroke: $medium_gray;
+			}
+		}
+	}
+	span {
+		position: relative;
+	    top: 4px;
+	    font-size: 14px;
+	    width: 98%;
+	    display: block;
+	    text-align: right;
+	}
+}
+
 
 /* flex */
 

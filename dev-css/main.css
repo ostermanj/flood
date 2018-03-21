@@ -40,6 +40,24 @@ path.background {
 .donut-div {
   width: 200px; }
 
+div#total-view {
+  position: relative; }
+  div#total-view svg {
+    position: absolute; }
+    div#total-view svg line {
+      stroke-width: 1px; }
+      div#total-view svg line.total-line {
+        stroke: #051839; }
+      div#total-view svg line.background-line {
+        stroke: #BCBEC0; }
+  div#total-view span {
+    position: relative;
+    top: 4px;
+    font-size: 14px;
+    width: 98%;
+    display: block;
+    text-align: right; }
+
 /* flex */
 .flex {
   display: flex; }
