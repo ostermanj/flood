@@ -14,6 +14,7 @@ export const Helpers = (function(){
 
     String.prototype.trunc = String.prototype.trunc || // ht https://stackoverflow.com/a/1199420
          function( n, useWordBoundary ){
+          /* jshint laxbreak:true */
              if (this.length <= n) { return this; }
              var subString = this.substr(0, n-1);
              return (useWordBoundary 

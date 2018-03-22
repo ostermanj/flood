@@ -1,5 +1,6 @@
  /* exported Charts */
- import { Charts } from '../js-exports/Charts';
+ import { Donuts } from '../js-exports/Donuts';
+ import { Bars } from '../js-exports/Bars';
  /* polyfills needed: Promise TO DO: OTHERS?
  */
 /*
@@ -17,11 +18,12 @@ to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
 */
 window.theMap  = (function(){   
 "use strict";
-	console.log(Charts);  
+	
     mapboxgl.accessToken = 'pk.eyJ1Ijoib3N0ZXJtYW5qIiwiYSI6ImNpdnU5dHVndjA2eDYyb3A3Nng1cGJ3ZXoifQ.Xo_k-kzGfYX_Yo_RDcHDBg';
 
     const mbHelper = require('mapbox-helper');
    	const theCharts = [];
+   	var totalInViewChart;
     var geojson;
     var gateCheck = 0;
     
@@ -50,7 +52,19 @@ window.theMap  = (function(){
 		}
 		addUnclustered();
 		addClustered();
-		featuresInView.render();
+		totalInViewChart = new Bars.Bar({
+			title: 'Properties in view', 
+			margin: {
+				top:0,
+				right:1,
+				bottom:0,
+				left:1
+			},
+			heightToWidth: 0.03,
+			container: '#total-view',
+			total: geojson.features.length
+			});
+		
 	} // end gate
 
 	function addUnclustered(){
@@ -175,7 +189,7 @@ window.theMap  = (function(){
 			//addClusterLayers(rtn);
 			
 			theCharts.push(
-				new Charts.Donut({
+				new Donuts.Donut({
 					margin: { // percentages
 		                top: 15,
 		                right: 10,
@@ -192,9 +206,21 @@ window.theMap  = (function(){
 			);
 		}); // end d3 csv
 	} // end toGeoJSON
-	var featuresInView = {
+	/*var featuresInView = {
 		render(){
-			this.total = geojson.features.length;
+			this.chart = new Bars.Bar({
+				margin: {
+					top:0,
+					right:0,
+					bottom:0,
+					left:0
+				},
+				heightToWidth: 0.03,
+				container: '#total-view',
+				total: geojson.features.length
+			});
+
+			/*this.total = geojson.features.length;
 			this.svg = d3.select('#total-view')
 				.append('svg')
 				.attr('width', '100%')
@@ -226,14 +252,14 @@ window.theMap  = (function(){
 		update(n){
 			/*d3.select('#total-in-view')
 				.text(() => d3.format(",")(n) + ' of ' + d3.format(",")(this.total) + ' properties in view');*/
-			this.line
+			/*this.line
 				.transition().duration(200)
 				.attr('x1', () => ( n / this.total) * 100 );
 			this.text
 				.text(() => `${d3.format(",")(n)} of ${d3.format(",")(this.total)} in view` );
 
-		}
-	};
+		}*/
+
 	
 	var matchingIDs = new Set();
 	function countFeatures(){
@@ -259,7 +285,7 @@ window.theMap  = (function(){
 		updateAll();
 	});
 	function updateAll(){
-		featuresInView.update(countFeatures());
+		totalInViewChart.update(countFeatures());
 		theCharts.forEach(each => each.update(false, matchingIDs));
 	}
 	/*theMap.on("mousemove", "points-data-driven", function(e) {

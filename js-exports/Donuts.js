@@ -1,4 +1,4 @@
-export const Charts = (function(){
+export const Donuts = (function(){
     /* globals d3 */
    /* const medianIncomes = new Map();
     function createMedianIncomeMap(geojson){

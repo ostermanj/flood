@@ -49,17 +49,19 @@ div#total-view {
     position: absolute; }
     div#total-view svg line {
       stroke-width: 1px; }
-      div#total-view svg line.total-line {
-        stroke: #051839; }
-      div#total-view svg line.background-line {
+      div#total-view svg line.foreground-line {
+        stroke: #990000; }
+      div#total-view svg line.background-line-gray {
         stroke: #BCBEC0; }
+      div#total-view svg line.background-line-blue {
+        stroke: #bfccd7; }
   div#total-view span {
     position: relative;
-    top: 4px;
     font-size: 14px;
-    width: 98%;
     display: block;
-    text-align: right; }
+    padding: 0 1%; }
+    div#total-view span.figure-title {
+      color: #051839; }
 
 /* flex */
 .flex {

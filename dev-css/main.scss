@@ -80,21 +80,26 @@ div#total-view {
 		position: absolute;
 		line {
 			stroke-width: 1px;
-			&.total-line {
-				stroke: $blue;
+			&.foreground-line {
+				stroke: $red;
 			}
-			&.background-line {
+			&.background-line-gray {
 				stroke: $medium_gray;
+			}
+			&.background-line-blue {
+				stroke: $light_blue;
 			}
 		}
 	}
 	span {
 		position: relative;
-	    top: 4px;
 	    font-size: 14px;
-	    width: 98%;
 	    display: block;
-	    text-align: right;
+	    padding: 0 1%;
+	    &.figure-title {
+	    	color: $blue;
+	    }
+	    
 	}
 }
 
