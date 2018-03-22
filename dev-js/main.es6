@@ -33,7 +33,7 @@ window.theMap  = (function(){
 	    center: [-96.29192961129883, 38.453175289053746],
 	    zoom: 3,
 	    maxBounds: [[-142.88705714746362, 16.058344948432406],[-51.9023017869731,55.76690067417138]],
-	    minZoom: 3,
+	    minZoom: 1.5,
 	    attributionControl: false,
 	});
 
@@ -50,21 +50,9 @@ window.theMap  = (function(){
 		if ( gateCheck < 2 ){
 			return;
 		}
+		updateAll();
 		addUnclustered();
 		addClustered();
-		totalInViewChart = new Bars.Bar({
-			title: 'Properties in view', 
-			margin: {
-				top:0,
-				right:1,
-				bottom:0,
-				left:1
-			},
-			heightToWidth: 0.03,
-			container: '#total-view',
-			total: geojson.features.length
-			});
-		
 	} // end gate
 
 	function addUnclustered(){
@@ -119,12 +107,9 @@ window.theMap  = (function(){
 			}]
 		); 
 	}
-
-	/*function checkFeatures(){
-		var features;
+	/*function checkFeaturesLoaded(){
 		if ( theMap.loaded()){
-			features = theMap.queryRenderedFeatures({layers:['points']});
-			console.log(features);
+			
 			theMap.off('render', checkFeatures);
 		}
 	}*/
@@ -184,11 +169,8 @@ window.theMap  = (function(){
 				"type": "FeatureCollection",
 				"features": features
 			};
-			gateCheck++;  
-			gate();
-			//addClusterLayers(rtn);
-			
-			theCharts.push(
+			theCharts.push( // should be able to create charts now, whether or not map has loaded. map needs to have
+							// loaded for them to update, though.
 				new Donuts.Donut({
 					margin: { // percentages
 		                top: 15,
@@ -204,6 +186,28 @@ window.theMap  = (function(){
 		            }
 				})
 			);
+			totalInViewChart = new Bars.Bar({
+				title: 'Properties in view', 
+				margin: {
+					top:0,
+					right:1,
+					bottom:0,
+					left:1
+				},
+				heightToWidth: 0.03,
+				container: '#total-view',
+				data: geojson.features,
+				numerator(){
+					return this.total; 
+				},
+				textFunction(n){
+					return `${d3.format(",")(n)} of ${d3.format(",")(this.total)}`;
+				}
+			});
+			gateCheck++;  
+			gate();
+			//addClusterLayers(rtn);
+			
 		}); // end d3 csv
 	} // end toGeoJSON
 	/*var featuresInView = {
@@ -286,7 +290,7 @@ window.theMap  = (function(){
 	});
 	function updateAll(){
 		totalInViewChart.update(countFeatures());
-		theCharts.forEach(each => each.update(false, matchingIDs));
+		theCharts.forEach(each => each.update(matchingIDs));
 	}
 	/*theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);

@@ -14,7 +14,10 @@ export const Bars = (function(){
 	        this.title = configObject.title;
 	        this.comparator = configObject.comparator;
 	        this.backgroundColor = configObject.backgroundColor || 'gray';
-	        this.total = configObject.total;
+	        this.data = configObject.data;
+	        this.total = this.data.length;
+	        this.textFunction = configObject.textFunction;
+	        this.numerator = configObject.numerator;
 
 	        d3.select(configObject.container)
 	        	.append('span')
@@ -45,10 +48,10 @@ export const Bars = (function(){
 	        	.attr('y1',0);
 
 	        this.text = d3.select('#total-view')
-	        	.append('span')
-	        	.text(() => `${d3.format(",")(this.total)} of ${d3.format(",")(this.total)} in view` );
+	        	.append('span');
+	        	
 
-	        this.update(this.total);  
+	        //this.update(this.numerator());  
         },
         update(n){
 			
@@ -56,7 +59,7 @@ export const Bars = (function(){
 				.transition().duration(200)
 				.attr('x1', () => (( n / this.total) * 100 ) - this.margin.left - this.margin.right );
 			this.text
-				.text(() => `${d3.format(",")(n)} of ${d3.format(",")(this.total)}` );
+				.text(() => this.textFunction(n));
 		}
 	};
 

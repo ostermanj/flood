@@ -52,12 +52,12 @@ export const Donuts = (function(){
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
 
 	        this.foreground = this.svg.append('path')
-	            .datum({endAngle: tau})
+	            .datum({endAngle: 0})
 	            .classed('foreground',true)
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')')
 	            .attr('d', this.arc);
 
-	        this.update(true);
+	     //   this.update(true);
 
 	        /* this.svg.append("text")
 	            .attr("text-anchor", "middle")
@@ -67,27 +67,17 @@ export const Donuts = (function(){
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');*/
 
 	    },
-	    update(isFirstUpdate, matchingIDs){
-	    	var total,
-	    		filteredData,
-	    		numberMatching = 0;
-	    	if ( isFirstUpdate ){
-	    		total = this.data.length;
-	    		this.data.forEach(each => {
-	    			if ( this.comparator(each) ){
-	    				numberMatching++;
-	    			}
-	    		});
-	    	} else {
-	    		console.log(this.data);
-	    		filteredData = this.data.filter(each => matchingIDs.has(each.properties.id));
+	    update(matchingIDs){
+	    	var	numberMatching = 0,
+	    		filteredData = this.data.filter(each => matchingIDs.has(each.properties.id)),
 	    		total = filteredData.length;
-	    		filteredData.forEach(each => {
-	    			if ( this.comparator(each) ){
-	    				numberMatching++;
-	    			}
-	    		});
-	    	}
+
+    		filteredData.forEach(each => {
+    			if ( this.comparator(each) ){
+    				numberMatching++;
+    			}
+    		});
+	    	
 	    	var endAngle = (numberMatching / total) * tau;
 
 	    	this.foreground 
