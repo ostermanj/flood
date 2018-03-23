@@ -56,7 +56,7 @@ export const Donuts = (function(){
 	            .classed('foreground',true)
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')')
 	            .attr('d', this.arc);
-
+ 
 	     //   this.update(true);
 
 	        /* this.svg.append("text")
@@ -67,9 +67,9 @@ export const Donuts = (function(){
 	            .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');*/
 
 	    },
-	    update(matchingIDs){
+	    update(inViewIDs){
 	    	var	numberMatching = 0,
-	    		filteredData = this.data.filter(each => matchingIDs.has(each.properties.id)),
+	    		filteredData = this.data.filter(each => inViewIDs.has(each.properties.id)),
 	    		total = filteredData.length;
 
     		filteredData.forEach(each => {

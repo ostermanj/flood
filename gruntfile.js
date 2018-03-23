@@ -102,8 +102,12 @@ module.exports = function(grunt){
                 files: ['*.html'],
                 tasks: ['htmlhint']
             },
+            jshintOnly: {
+                files: ['js-exports/**/*.js'],
+                tasks: ['jshint']
+            },
             js: {
-                files: ['dev-js/*.es6','js-exports/**/*.js'],
+                files: ['dev-js/*.es6'],
                 tasks: ['jshint','browserify'] // TO DO: ADD UGLIFY ET AL TO BULD TASK
             },
             scss: {

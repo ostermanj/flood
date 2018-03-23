@@ -43,25 +43,32 @@ path.foreground {
 .donut-div {
   width: 200px; }
 
-div#total-view {
-  position: relative; }
-  div#total-view svg {
+div.bar-chart {
+  position: relative;
+  margin: 2%; }
+  div.bar-chart svg {
     position: absolute; }
-    div#total-view svg line {
+    div.bar-chart svg line {
       stroke-width: 1px; }
-      div#total-view svg line.foreground-line {
+      div.bar-chart svg line.foreground-line {
         stroke: #990000; }
-      div#total-view svg line.background-line-gray {
+      div.bar-chart svg line.background-line-gray {
         stroke: #BCBEC0; }
-      div#total-view svg line.background-line-blue {
+      div.bar-chart svg line.background-line-blue {
         stroke: #bfccd7; }
-  div#total-view span {
+  div.bar-chart span {
     position: relative;
     font-size: 14px;
     display: block;
     padding: 0 1%; }
-    div#total-view span.figure-title {
+    div.bar-chart span.figure-title {
       color: #051839; }
+  div.bar-chart.overflow::after {
+    content: '+';
+    position: absolute;
+    top: 0;
+    right: 1%;
+    color: #990000; }
 
 /* flex */
 .flex {

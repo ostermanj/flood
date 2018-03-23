@@ -23,7 +23,7 @@ window.theMap  = (function(){
 
     const mbHelper = require('mapbox-helper');
    	const theCharts = [];
-   	var totalInViewChart;
+   
     var geojson;
     var gateCheck = 0;
     
@@ -53,7 +53,33 @@ window.theMap  = (function(){
 		updateAll();
 		addUnclustered();
 		addClustered();
+		//calculateZScores('prem');
 	} // end gate
+
+	function calculateZScores(field,cutoff){ // cutoff specifies upper bound to get rid of outliers
+		console.log('calculating z-scores');
+		var mean = d3.mean(geojson.features, d => d.properties[field]);
+		var sd =   d3.deviation(geojson.features, d => d.properties[field]);
+		var min,
+			max,
+			cutoffZ = ( cutoff - mean ) / sd;
+
+		console.log('cutoff is ' + cutoffZ);
+		geojson.features.forEach(each => {
+			each.properties[field + 'Z'] = ( each.properties[field] - mean ) / sd;
+			min = each.properties[field + 'Z'] < min || min === undefined ? each.properties[field + 'Z'] : min;
+			max = each.properties[field + 'Z'] > max || max === undefined ? each.properties[field + 'Z'] : max;
+		});
+		max = d3.min([max,cutoffZ,3]);
+		min = d3.max([min, -3]);
+		console.log('done', geojson, min, max);
+		return {
+			min,
+			max,
+			mean,
+			sd
+		};
+	}
 
 	function addUnclustered(){
 		return mbHelper.addSourceAndLayers.call(theMap,
@@ -183,27 +209,87 @@ window.theMap  = (function(){
 		            data: geojson.features,
 		            comparator: function(each){
 		            	return each.properties.t_ded < 5;
-		            }
+		            } 
+				}),
+				new Bars.Bar({ 
+					title: 'Properties in view', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					heightToWidth: 0.03,
+					container: '#in-view-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						return inViewIDs.size;
+					},
+					denominator(){
+						return this.data.length;
+					},
+					textFunction(n,d){
+						return `${d3.format(",")(n)} of ${d3.format(",")(d)} (${d3.format(".0%")(n / d)})`;
+					}
+				}),
+				new Bars.Bar({
+					title: '... with low deductible', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					heightToWidth: 0.03,
+					container: '#deductible-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id)),
+							numberMatching = 0;
+						filteredData.forEach(each => {
+							if ( each.properties.t_ded < 5 ){
+								numberMatching++;
+							}
+						});
+						return numberMatching;
+					},
+					denominator(inViewIDs){ // for this one denominator is number of policies in view
+						 return inViewIDs.size;
+					},
+					textFunction(n,d){
+						return `${d3.format(",")(n)} of ${d3.format(",")(d)} (${d3.format(".0%")(n / d)})`;
+					}
+				}),
+				new Bars.Bar({
+					title: 'Average premium', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					zScores: calculateZScores('prem',2200),
+					min(){
+						console.log(this);
+						return this.zScores.min;
+					},
+					heightToWidth: 0.03,
+					container: '#premium-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
+							
+						return d3.mean(filteredData, d => d.properties.premZ);
+					},
+					denominator(){ 
+						 return this.zScores.max;
+					},
+					textFunction(n){ 
+						console.log(this.zScores);
+						return '$' + d3.format(".2f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
+					}
 				})
-			);
-			totalInViewChart = new Bars.Bar({
-				title: 'Properties in view', 
-				margin: {
-					top:0,
-					right:1,
-					bottom:0,
-					left:1
-				},
-				heightToWidth: 0.03,
-				container: '#total-view',
-				data: geojson.features,
-				numerator(){
-					return this.total; 
-				},
-				textFunction(n){
-					return `${d3.format(",")(n)} of ${d3.format(",")(this.total)}`;
-				}
-			});
+			); // end push
 			gateCheck++;  
 			gate();
 			//addClusterLayers(rtn);
@@ -262,13 +348,13 @@ window.theMap  = (function(){
 			this.text
 				.text(() => `${d3.format(",")(n)} of ${d3.format(",")(this.total)} in view` );
 
-		}*/
+		}*/ 
 
 	
-	var matchingIDs = new Set();
-	function countFeatures(){
+	var inViewIDs = new Set();
+	function countFeatures(){ 
 		/* jshint laxbreak:true */
-		matchingIDs.clear();
+		inViewIDs.clear(); 
 		//var count = 0;
 		var bounds = theMap.getBounds();
 		geojson.features.forEach(each => {
@@ -276,11 +362,9 @@ window.theMap  = (function(){
 				 && each.properties.longitude <= bounds._ne.lng 
 				 && each.properties.latitude  >= bounds._sw.lat 
 				 && each.properties.latitude  <= bounds._ne.lat ){
-				matchingIDs.add(each.properties.id);
+				inViewIDs.add(each.properties.id);
 			}
 		});
-		console.log(matchingIDs);
-		return matchingIDs.size;
 	}
 	theMap.on('moveend', function(){
 		updateAll();
@@ -289,8 +373,8 @@ window.theMap  = (function(){
 		updateAll();
 	});
 	function updateAll(){
-		totalInViewChart.update(countFeatures());
-		theCharts.forEach(each => each.update(matchingIDs));
+		countFeatures();
+		theCharts.forEach(each => each.update(inViewIDs));
 	}
 	/*theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);

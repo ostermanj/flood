@@ -74,8 +74,9 @@ path.foreground {
 	width: 200px;
 }
 
-div#total-view {
+div.bar-chart {
 	position:relative;
+	margin: 2%;
 	svg {
 		position: absolute;
 		line {
@@ -100,6 +101,13 @@ div#total-view {
 	    	color: $blue;
 	    }
 	    
+	}
+	&.overflow::after {
+		content: '+';
+	    position: absolute;
+	    top: 0;
+	    right: 1%;
+	    color: $red;
 	}
 }
 
