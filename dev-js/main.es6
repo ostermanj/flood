@@ -56,19 +56,43 @@ window.theMap  = (function(){
 		//calculateZScores('prem');
 	} // end gate
 
-	function calculateZScores(field,cutoff){ // cutoff specifies upper bound to get rid of outliers
+	function calculateZScores(field, cutoff = null, hardCutoff = null, ignore = [] ){  // cutoff specifies upper bound to get rid of outliers
+																  // a weak cutoff calculates values for whole set but
+																  // sets max for the viz based on the cutoff value. a hard
+																  // cutoff excludes values beyond the cutoff from the 
+																  // calculations	
+																  // the ignore array is values that should be treated as invalid
+																  // such as all the erroneoue $250k home values.
 		console.log('calculating z-scores');
-		var mean = d3.mean(geojson.features, d => d.properties[field]);
-		var sd =   d3.deviation(geojson.features, d => d.properties[field]);
+		var mean = d3.mean(geojson.features, d => {
+			if ( hardCutoff === null ) {
+				return ignore.indexOf(d.properties[field]) === -1 ? d.properties[field] : null;
+			}
+			if ( d.properties[field] <= hardCutoff ){
+				return ignore.indexOf(d.properties[field]) === -1 ? d.properties[field] : null;
+			}
+		});
+		var sd = d3.deviation(geojson.features, d => {
+			if ( hardCutoff === null ) {
+				return ignore.indexOf(d.properties[field]) === -1 ? d.properties[field] : null;
+			}
+			if ( d.properties[field] <= hardCutoff ){
+				return ignore.indexOf(d.properties[field]) === -1 ? d.properties[field] : null;
+			}
+		});
 		var min,
 			max,
-			cutoffZ = ( cutoff - mean ) / sd;
+			cutoffZ = cutoff ? ( cutoff - mean ) / sd : null;
 
 		console.log('cutoff is ' + cutoffZ);
 		geojson.features.forEach(each => {
-			each.properties[field + 'Z'] = ( each.properties[field] - mean ) / sd;
-			min = each.properties[field + 'Z'] < min || min === undefined ? each.properties[field + 'Z'] : min;
-			max = each.properties[field + 'Z'] > max || max === undefined ? each.properties[field + 'Z'] : max;
+			if ( hardCutoff && each.properties[field] > hardCutoff || ignore.indexOf(each.properties[field]) !== -1 ){
+				each.properties[field + 'Z'] = null;
+			} else {
+				each.properties[field + 'Z'] = ( each.properties[field] - mean ) / sd;
+				min = each.properties[field + 'Z'] < min || min === undefined ? each.properties[field + 'Z'] : min;
+				max = each.properties[field + 'Z'] > max || max === undefined ? each.properties[field + 'Z'] : max;
+			}
 		});
 		max = d3.min([max,cutoffZ,3]);
 		min = d3.max([min, -3]);
@@ -268,7 +292,7 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
-					zScores: calculateZScores('prem',2200),
+					zScores: calculateZScores('prem',2000),
 					min(){
 						console.log(this);
 						return this.zScores.min;
@@ -286,7 +310,36 @@ window.theMap  = (function(){
 					},
 					textFunction(n){ 
 						console.log(this.zScores);
-						return '$' + d3.format(".2f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
+						return '$' + d3.format(",.2f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
+					}
+				}),
+				
+				new Bars.Bar({
+					title: 'Average replacement value', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					zScores: calculateZScores('value',550,20000,[250]),
+					min(){
+						
+						return this.zScores.min;
+					},
+					heightToWidth: 0.03,
+					container: '#value-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
+						return d3.mean(filteredData, d => d.properties.valueZ);
+					},
+					denominator(){ 
+						 return this.zScores.max;
+					},
+					textFunction(n){ 
+						console.log(this.zScores);
+						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) * 1000 ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				})
 			); // end push
@@ -376,9 +429,9 @@ window.theMap  = (function(){
 		countFeatures();
 		theCharts.forEach(each => each.update(inViewIDs));
 	}
-	/*theMap.on("mousemove", "points-data-driven", function(e) {
+	theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);
-    });*/
+    });
 
 	return theMap;
    
