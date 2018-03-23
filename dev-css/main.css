@@ -21,6 +21,9 @@ h1, h2, h3, h4, h5, h6 {
 #map-feature {
   background: #E2E3E4;
   margin-bottom: 0.78125em; }
+  #map-feature h2 {
+    padding: 2% 2% 0;
+    color: #051839; }
 
 .responsive-container {
   position: relative;
@@ -43,13 +46,18 @@ path.foreground {
 .donut-div {
   width: 200px; }
 
+div.bar-charts, #map {
+  border-top: 1px solid #051839; }
+
 div.bar-chart {
   position: relative;
-  margin: 2%; }
+  margin: 2%;
+  width: 220px;
+  flex-grow: 1; }
   div.bar-chart svg {
     position: absolute; }
     div.bar-chart svg line {
-      stroke-width: 1px; }
+      stroke-width: 2px; }
       div.bar-chart svg line.foreground-line {
         stroke: #990000; }
       div.bar-chart svg line.background-line-gray {
@@ -72,7 +80,8 @@ div.bar-chart {
 
 /* flex */
 .flex {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap; }
 
 .space-between {
   justify-content: space-between; }

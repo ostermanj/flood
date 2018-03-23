@@ -1,6 +1,7 @@
  /* exported Charts */
- import { Donuts } from '../js-exports/Donuts';
+ //import { Donuts } from '../js-exports/Donuts';
  import { Bars } from '../js-exports/Bars';
+ //d3.tip = require('d3-tip');
  /* polyfills needed: Promise TO DO: OTHERS?
  */
 /*
@@ -19,8 +20,13 @@ to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
 window.theMap  = (function(){   
 "use strict";
 	
+	//var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d; });
+	
     mapboxgl.accessToken = 'pk.eyJ1Ijoib3N0ZXJtYW5qIiwiYSI6ImNpdnU5dHVndjA2eDYyb3A3Nng1cGJ3ZXoifQ.Xo_k-kzGfYX_Yo_RDcHDBg';
-
+    d3.selectAll('.help-link')
+    	.on('click', () => {
+    		d3.event.preventDefault();
+    	});
     const mbHelper = require('mapbox-helper');
    	const theCharts = [];
    
@@ -38,7 +44,7 @@ window.theMap  = (function(){
 	});
 
 	var nav = new mapboxgl.NavigationControl({showCompass:false});
-	theMap.addControl(nav, 'top-left');
+	theMap.addControl(nav, 'top-right');
 
 	toGeoJSON('policies.csv');
 
@@ -221,20 +227,6 @@ window.theMap  = (function(){
 			};
 			theCharts.push( // should be able to create charts now, whether or not map has loaded. map needs to have
 							// loaded for them to update, though.
-				new Donuts.Donut({
-					margin: { // percentages
-		                top: 15,
-		                right: 10,
-		                bottom: 5,
-		                left: 10
-		            },
-		            heightToWidth: 1,
-		            container: '#chart-0',
-		            data: geojson.features,
-		            comparator: function(each){
-		            	return each.properties.t_ded < 5;
-		            } 
-				}),
 				new Bars.Bar({ 
 					title: 'Properties in view', 
 					margin: {
@@ -243,7 +235,7 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
-					heightToWidth: 0.03,
+					heightToWidth: 0.05,
 					container: '#in-view-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
@@ -264,7 +256,7 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
-					heightToWidth: 0.03,
+					heightToWidth: 0.05,
 					container: '#deductible-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
@@ -297,7 +289,7 @@ window.theMap  = (function(){
 						console.log(this);
 						return this.zScores.min;
 					},
-					heightToWidth: 0.03,
+					heightToWidth: 0.05,
 					container: '#premium-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
@@ -327,7 +319,7 @@ window.theMap  = (function(){
 						
 						return this.zScores.min;
 					},
-					heightToWidth: 0.03,
+					heightToWidth: 0.05,
 					container: '#value-bar',
 					data: geojson.features,
 					numerator(inViewIDs){

@@ -46,6 +46,10 @@ h1, h2, h3, h4, h5, h6 {
 #map-feature {
 	background: $light_gray;
 	margin-bottom: 0.78125em;
+	h2 {
+		padding: 2% 2% 0;
+		color: $blue;
+	}
 }
 
 .responsive-container {
@@ -73,14 +77,18 @@ path.foreground {
 .donut-div {
 	width: 200px;
 }
-
+div.bar-charts, #map {
+	border-top: 1px solid $blue;
+}
 div.bar-chart {
 	position:relative;
 	margin: 2%;
+	width: 220px;
+	flex-grow: 1;
 	svg {
 		position: absolute;
 		line {
-			stroke-width: 1px;
+			stroke-width: 2px;
 			&.foreground-line {
 				stroke: $red;
 			}
@@ -116,6 +124,7 @@ div.bar-chart {
 
 .flex {
 	display: flex;
+	flex-wrap: wrap;
 }
 
 .space-between {
