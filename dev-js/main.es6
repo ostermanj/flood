@@ -14,7 +14,7 @@ import { createResultItem } from '../js-exports/ResultItems';
   
 /*
 to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
-
+ 
 
 */
 window.theMap  = (function(){   
@@ -31,6 +31,7 @@ window.theMap  = (function(){
    	const theCharts = [];
    
     var geojson;
+    var featurePropertiesById = new Map();
     var gateCheck = 0;
     
     var theMap = new mapboxgl.Map({
@@ -46,8 +47,8 @@ window.theMap  = (function(){
 	var nav = new mapboxgl.NavigationControl({showCompass:false});
 	theMap.addControl(nav, 'top-right');
 
+	var medianIncomes = new Map();
 	toGeoJSON('policies.csv');
-
 	theMap.on('load', function(){
 		gateCheck++;
 		gate();
@@ -62,6 +63,22 @@ window.theMap  = (function(){
 		//calculateZScores('prem');
 	} // end gate
 
+	/*var censusTractsInView = new Set();
+	function calculateMedianIncomes(inViewIDs){
+		console.log(inViewIDs);
+		var medianIncomes = [];
+		censusTractsInView.clear();
+		inViewIDs.forEach(d => {
+			console.log(d);
+			var feature = geojson.features.find(f => f.properties.id === d);
+			var censusTract = feature.cen_tract;
+			if ( !censusTractsInView.has(censusTract)){
+				censusTractsInView.add(censusTract);
+				medianIncomes.push(feature.med_income);
+			}
+		});
+		return medianIncomes;
+	}*/
 	function calculateZScores(field, cutoff = null, hardCutoff = null, ignore = [] ){  // cutoff specifies upper bound to get rid of outliers
 																  // a weak cutoff calculates values for whole set but
 																  // sets max for the viz based on the cutoff value. a hard
@@ -206,12 +223,18 @@ window.theMap  = (function(){
 			//console.log(data);
 			var features = []; 
 			data.forEach(each => {
+
+				var value = +each.med_income ? +each.med_income : null;
+				if ( !medianIncomes.has(+each.cen_tract) ){
+					medianIncomes.set(+each.cen_tract, value);
+				}
 				var coerced = {};
 				for ( var key in each ) {
 					if ( each.hasOwnProperty(key) ){
 						coerced[key] = !isNaN(+each[key]) ? +each[key] : each[key];
 					}
 				}  
+				featurePropertiesById.set(coerced.id,coerced);
 				features.push({
 					"type": "Feature",
 					"properties": coerced,
@@ -221,6 +244,8 @@ window.theMap  = (function(){
 					}   
 				});
 			}); // end forEach
+			console.log(medianIncomes);
+			console.log(featurePropertiesById);
 			geojson =  {
 				"type": "FeatureCollection",
 				"features": features
@@ -307,7 +332,7 @@ window.theMap  = (function(){
 				}),
 				
 				new Bars.Bar({
-					title: 'Average replacement value', 
+					title: 'Average home replacement value', 
 					margin: {
 						top:0,
 						right:1,
@@ -333,7 +358,73 @@ window.theMap  = (function(){
 						console.log(this.zScores);
 						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) * 1000 ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
+				}),
+				new Bars.Bar({
+					title: 'Average flood insurance coverage', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					//zScores: calculateZScores('tcov',null,null,[]),
+					min(){
+						return d3.min(this.data, d => d.properties.tcov);
+					},
+					heightToWidth: 0.05,
+					container: '#coverage-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						this.filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
+						return d3.mean(this.filteredData, d => d.properties.tcov);
+					},
+					denominator(){ 
+						 return d3.max(this.data, d => d.properties.tcov);
+					},
+					textFunction(n){ 
+						
+						return '$' + d3.format(",.0f")(n);
+					}
+				}),
+				new Bars.Bar({
+					title: 'Average median household income (census tract)', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					//zScores: calculateZScores('tcov',null,null,[]),
+					min(){
+						return d3.min([...medianIncomes.values()]);
+					},
+					heightToWidth: 0.05,
+					container: '#coverage-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						var representedTracts = new Set();
+						var medIncomeArray = [];
+						inViewIDs.forEach(id => {
+							var matchingFeature = featurePropertiesById.get(id);
+							if ( !representedTracts.has(matchingFeature.cen_tract) ){
+								representedTracts.add(matchingFeature.cen_tract);
+								medIncomeArray.push(matchingFeature.med_income);
+							}
+						});
+						console.log('medIncomeArray',medIncomeArray);
+						return d3.mean(medIncomeArray);
+
+						//this.medianIncomesInView = calculateMedianIncomes(inViewIDs);
+						//return d3.mean(this.medianIncomesInView);
+					},
+					denominator(){ 
+						 return d3.max([...medianIncomes.values()]);
+					},
+					textFunction(n){ 
+						return '$' + d3.format(",.0f")(n);
+					}
 				})
+
 			); // end push
 			gateCheck++;  
 			gate();
@@ -410,6 +501,7 @@ window.theMap  = (function(){
 				inViewIDs.add(each.properties.id);
 			}
 		});
+		console.log(inViewIDs);
 	}
 	theMap.on('moveend', function(){
 		updateAll();
