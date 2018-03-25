@@ -14,6 +14,7 @@ export const Bars = (function(){
 	        this.height = configObject.heightToWidth * 100 - this.margin.top - this.margin.bottom;
 	        this.title = configObject.title;
 	        this.comparator = configObject.comparator;
+	        this.truncateRight = configObject.truncateRight || false;
 	        this.backgroundColor = configObject.backgroundColor || 'gray';
 	        this.data = configObject.data;
 	        this.numerator = configObject.numerator;
@@ -65,9 +66,17 @@ export const Bars = (function(){
 				d = this.denominator(inViewIDs); 
 			d3.select(this.container)
 				.classed('overflow', n > d );
-        	if ( this.min < 0 && Math.abs(this.min) < d && d > 0 ) {
-        		this.min = 0 - d;
+
+        	if (this.truncateRight){
+        		d = this.min = 0 - d;
+        	} else if ( this.min < 0 && d > 0 ) {
+        		if (Math.abs(this.min) < d) {
+        			this.min = 0 - d;
+        		} else {
+        			d = 0 - this.min;
+        		}
         	}
+        	console.log('min: ' + this.min + '; max: ' + d);
 			this.scale = d3.scaleLinear().domain([this.min,d]).range([0,this.width]).clamp(true);
 			this.line
 				.transition().duration(200)

@@ -226,7 +226,7 @@ window.theMap  = (function(){
 
 				var value = +each.med_income ? +each.med_income : null;
 				if ( !medianIncomes.has(+each.cen_tract) ){
-					medianIncomes.set(+each.cen_tract, value);
+					medianIncomes.set(+each.cen_tract, value); // no duplicate tracts
 				}
 				var coerced = {};
 				for ( var key in each ) {
@@ -367,23 +367,28 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
-					//zScores: calculateZScores('tcov',null,null,[]),
-					min(){
+					zScores: calculateZScores('tcov',null,null,[]),
+					/*min(){
 						return d3.min(this.data, d => d.properties.tcov);
+					},*/
+					min(){
+						
+						return this.zScores.min;
 					},
 					heightToWidth: 0.05,
 					container: '#coverage-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
 						this.filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
-						return d3.mean(this.filteredData, d => d.properties.tcov);
+						return d3.mean(this.filteredData, d => d.properties.tcovZ);
 					},
 					denominator(){ 
-						 return d3.max(this.data, d => d.properties.tcov);
+						 return this.zScores.max;
 					},
 					textFunction(n){ 
 						
-						return '$' + d3.format(",.0f")(n);
+						//return '$' + d3.format(",.0f")(n);
+						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) * 1000 ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				}),
 				new Bars.Bar({
@@ -394,34 +399,64 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
-					//zScores: calculateZScores('tcov',null,null,[]),
+					zScores: (function(){
+						var mean = d3.mean([...medianIncomes.values()]);
+						var sd = d3.deviation([...medianIncomes.values()]);
+						var min,
+							max,
+							cutoffZ = ( 150000 - mean ) / sd;
+						geojson.features.forEach(each => {
+							// some med_incomes are recorded as zero; they should be ignored
+							if ( each.properties.med_income > 0 ){
+								each.properties.med_incomeZ = ( each.properties.med_income - mean ) / sd;
+								min = each.properties.med_incomeZ < min || min === undefined ? each.properties.med_incomeZ : min;
+								max = each.properties.med_incomeZ > max || max === undefined ? each.properties.med_incomeZ : max;
+							} else {
+								each.properties.med_incomeZ = null;
+							}
+						});
+						max = max < cutoffZ ? max : cutoffZ;
+						console.log({
+							min,
+							max,
+							mean,
+							sd
+						});
+						return {
+							min,
+							max,
+							mean,
+							sd
+						};
+					})(),
 					min(){
-						return d3.min([...medianIncomes.values()]);
+						return this.zScores.min;
 					},
 					heightToWidth: 0.05,
-					container: '#coverage-bar',
+					container: '#income-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
 						var representedTracts = new Set();
-						var medIncomeArray = [];
+						var medIncomeZArray = [];
 						inViewIDs.forEach(id => {
 							var matchingFeature = featurePropertiesById.get(id);
 							if ( !representedTracts.has(matchingFeature.cen_tract) ){
 								representedTracts.add(matchingFeature.cen_tract);
-								medIncomeArray.push(matchingFeature.med_income);
+								medIncomeZArray.push(matchingFeature.med_incomeZ); // pushes income from only one representative
+																				  //
 							}
 						});
-						console.log('medIncomeArray',medIncomeArray);
-						return d3.mean(medIncomeArray);
+						console.log('medIncomeZArray',medIncomeZArray);
+						return d3.mean(medIncomeZArray);
 
 						//this.medianIncomesInView = calculateMedianIncomes(inViewIDs);
 						//return d3.mean(this.medianIncomesInView);
 					},
 					denominator(){ 
-						 return d3.max([...medianIncomes.values()]);
+						 return this.zScores.max;
 					},
 					textFunction(n){ 
-						return '$' + d3.format(",.0f")(n);
+						return '$' + d3.format(",.0f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				})
 
@@ -483,7 +518,7 @@ window.theMap  = (function(){
 				.attr('x1', () => ( n / this.total) * 100 );
 			this.text
 				.text(() => `${d3.format(",")(n)} of ${d3.format(",")(this.total)} in view` );
-
+  
 		}*/ 
 
 	
