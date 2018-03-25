@@ -55,7 +55,8 @@ export const Bars = (function(){
 	        	.attr('y1',0);
 
 	        this.text = d3.select(this.container)
-	        	.append('span');
+	        	.append('span')
+	        	.attr('class','value');
 	        	
 
 	        //this.update(this.numerator());  

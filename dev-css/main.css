@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .responsive-container {
   position: relative;
-  padding-bottom: 56.25%;
+  padding-bottom: 50.25%;
   height: 0;
   overflow: hidden; }
   .responsive-container > div {
@@ -46,7 +46,7 @@ path.foreground {
 .donut-div {
   width: 200px; }
 
-div.bar-charts, #map {
+div.bar-charts:first-of-type, #map {
   border-top: 1px solid #051839; }
 
 div.bar-chart {
@@ -71,6 +71,8 @@ div.bar-chart {
     padding: 0 1%; }
     div.bar-chart span.figure-title {
       color: #051839; }
+    div.bar-chart span.value {
+      top: 10%; }
   div.bar-chart.overflow::after {
     content: '+';
     position: absolute;

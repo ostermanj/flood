@@ -37,7 +37,7 @@ window.theMap  = (function(){
     var theMap = new mapboxgl.Map({
 	    container: 'map',
 	    style: 'mapbox://styles/ostermanj/cjf03o37b3tve2rqp2inw6a1f',
-	    center: [-96.29192961129883, 38.453175289053746],
+	    center: [-95.149351486459073, 37.98467337085599],
 	    zoom: 3,
 	    maxBounds: [[-142.88705714746362, 16.058344948432406],[-51.9023017869731,55.76690067417138]],
 	    minZoom: 1.5,
@@ -117,8 +117,11 @@ window.theMap  = (function(){
 				max = each.properties[field + 'Z'] > max || max === undefined ? each.properties[field + 'Z'] : max;
 			}
 		});
-		max = d3.min([max,cutoffZ,3]);
-		min = d3.max([min, -3]);
+		console.log('actualMin:' + min, 'actualMax:' + max);
+		//max = d3.min([max,cutoffZ,3]);
+		//min = d3.max([min, -3]);
+		max = 2.33;
+		min = -2.33;
 		console.log('done', geojson, min, max);
 		return {
 			min,
@@ -392,7 +395,7 @@ window.theMap  = (function(){
 					}
 				}),
 				new Bars.Bar({
-					title: 'Average median household income (census tract)', 
+					title: 'Average median household income', 
 					margin: {
 						top:0,
 						right:1,
@@ -423,8 +426,8 @@ window.theMap  = (function(){
 							sd
 						});
 						return {
-							min,
-							max,
+							min: -2.33,
+							max: 2.33,
 							mean,
 							sd
 						};
@@ -457,6 +460,38 @@ window.theMap  = (function(){
 					},
 					textFunction(n){ 
 						return '$' + d3.format(",.0f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
+					}
+				}),
+				new Bars.Bar({
+					title: 'Average marginal cost for lower deductible', 
+					margin: {
+						top:0,
+						right:1,
+						bottom:0,
+						left:1 
+					},
+					zScores: calculateZScores('ddp',null,null,[]),
+					/*min(){
+						return d3.min(this.data, d => d.properties.tcov);
+					},*/
+					min(){
+						
+						return this.zScores.min;
+					},
+					heightToWidth: 0.05,
+					container: '#marginal-bar',
+					data: geojson.features,
+					numerator(inViewIDs){
+						this.filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
+						return d3.mean(this.filteredData, d => d.properties.ddpZ);
+					},
+					denominator(){ 
+						 return this.zScores.max;
+					},
+					textFunction(n){ 
+						
+						//return '$' + d3.format(",.0f")(n);
+						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				})
 
