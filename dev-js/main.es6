@@ -36,6 +36,8 @@ window.theMap  = (function(){
     var geojson;
     var featurePropertiesById = new Map(); 
     var gateCheck = 0;
+
+    var sizeZoomThreshold = 8;
     
     var theMap = new mapboxgl.Map({
 	    container: 'map',
@@ -145,7 +147,7 @@ window.theMap  = (function(){
 	            "id": "points",
 	            "type": "circle",
 	            "source": "policy-points",
-	            "maxzoom": 9,
+	            "maxzoom": sizeZoomThreshold,
 	            "paint": {
 	              	"circle-color": [
 		                'match',
@@ -163,7 +165,7 @@ window.theMap  = (function(){
 	            "id": "points-data-driven",
 	            "type": "circle",
 	            "source": "policy-points",
-	            "minzoom": 9,
+	            "minzoom": sizeZoomThreshold,
 	            "paint": {
 	              	"circle-color": [
 		                'match',
@@ -637,8 +639,11 @@ window.theMap  = (function(){
 	theMap.on('moveend', function(){
 		updateAll();
 	});
-	theMap.on('zoomend', function(){
+	theMap.on('zoomend', function(arg){
+		console.log(arg);
 		updateAll();
+		d3.select('#size-legend')
+			.classed('show', theMap.getZoom() >= sizeZoomThreshold);
 	});
 	function updateAll(){
 		countFeatures();

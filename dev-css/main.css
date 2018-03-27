@@ -24,7 +24,8 @@ h1, h2, h3, h4, h5, h6 {
   #map-feature h2 {
     padding: 2% 70px 0 2%;
     color: #051839;
-    position: relative; }
+    position: relative;
+    margin-bottom: 0; }
 
 .responsive-container {
   position: relative;
@@ -37,6 +38,35 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%; }
+
+#legend {
+  font-size: 14px; }
+  #legend > div {
+    margin: 0 2%; }
+  #legend span {
+    margin-right: 10px; }
+
+#size-legend {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 0.2s linear, max-height 0.2s linear; }
+  #size-legend.show {
+    opacity: 1;
+    max-height: 100px; }
+
+div.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 6px;
+  opacity: 0.5;
+  display: inline-block; }
+  div.circle.red {
+    background-color: #990000; }
+  div.circle.blue {
+    background-color: #0f439c; }
+  div.circle.white {
+    border: 1px solid white;
+    opacity: 1; }
 
 path.background {
   fill: #051839; }
