@@ -44,6 +44,12 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+p.warning {
+	    font-weight: bold;
+    border: 1px solid $red;
+    padding: 1%;
+}
+
 #map-feature {
 	background: $light_gray url('../assets/logo.svg') no-repeat 98% 99%;
 	margin-bottom: 0.78125em;
@@ -167,7 +173,7 @@ div.bar-charts {
 }
 div.bar-chart {
 	position:relative;
-	margin: 2%;
+	margin: 15px 2%;
 	width: 220px;
 	flex-grow: 1;
 	height:46px;

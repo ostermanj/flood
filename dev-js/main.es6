@@ -20,7 +20,19 @@ to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
 */
 window.theMap  = (function(){   
 "use strict";
-	
+	 function webgl_support() { 
+	   try{
+	    var canvas = document.createElement( 'canvas' ); 
+	    return !! window.WebGLRenderingContext && ( 
+	         canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+	   }catch( e ) { return false; } 
+	 }
+	 console.log(webgl_support());
+	if ( webgl_support() == null ){
+		d3.select('#webgl-warning')
+			.classed('warning', true)
+			.text('Your device may not support the graphics this tool relies on; please try on another.');
+	}
 	//var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d; });
 	
     mapboxgl.accessToken = 'pk.eyJ1Ijoib3N0ZXJtYW5qIiwiYSI6ImNpdnU5dHVndjA2eDYyb3A3Nng1cGJ3ZXoifQ.Xo_k-kzGfYX_Yo_RDcHDBg';
@@ -550,7 +562,16 @@ window.theMap  = (function(){
 				.datum(information)
 				.attr('width','12px')
 				.attr('viewBox', '0 0 12 12')
-				.attr('class','info-mark');
+				.attr('class','info-mark')
+				.append('g');
+
+			infoMarks
+				.call(tip)
+				.on('mouseenter', function(d){
+					console.log(d3.event);
+					tip.show.call(this,d);
+				})
+				.on('mouseleave', tip.hide);
 				
 
 			infoMarks
@@ -558,13 +579,8 @@ window.theMap  = (function(){
 				.attr('class', 'info-mark-background') 
 				.attr('cx',6)
 				.attr('cy',6)
-				.attr('r',6)
-				.call(tip)
-				.on('mouseenter', function(d){
-					console.log(d3.event);
-					tip.show.call(this,d);
-				})
-				.on('mouseleave', tip.hide);  
+				.attr('r',6);
+				
 
 			infoMarks
 				.append('path')
@@ -684,6 +700,8 @@ window.theMap  = (function(){
 	theMap.on("mousemove", "points-data-driven", function(e) {
         console.log(e);
     });
+
+   
 
 	return theMap;
    
