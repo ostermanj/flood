@@ -19,7 +19,7 @@ h1, h2, h3, h4, h5, h6 {
     content: 'placeholder'; }
 
 #map-feature {
-  background: #E2E3E4;
+  background: #E2E3E4 url("../assets/logo.svg") no-repeat 98% 99%;
   margin-bottom: 0.78125em; }
   #map-feature h2 {
     padding: 2% 70px 0 2%;
