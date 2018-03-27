@@ -1,12 +1,12 @@
- /* exported Charts, d3Tip */
+ /* exported Charts, d3Tip, MapValues */
  //import { Donuts } from '../js-exports/Donuts';
  import { Bars } from '../js-exports/Bars';
  import { d3Tip } from '../js-vendor/d3-tip';
+ import { MapValues } from '../js-vendor/polyfills';
  
  /* polyfills needed: Promise TO DO: OTHERS?
  */
 /*
-import { reflect, arrayFind, SVGInnerHTML, SVGFocus } from '../js-vendor/polyfills';
 import { Helpers } from '../js-exports/Helpers';
 import { d3Tip } from '../js-vendor/d3-tip';
 import { createBrowseButton } from '../js-exports/BrowseButtons';
