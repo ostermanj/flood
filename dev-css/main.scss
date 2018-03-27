@@ -47,8 +47,9 @@ h1, h2, h3, h4, h5, h6 {
 	background: $light_gray;
 	margin-bottom: 0.78125em;
 	h2 {
-		padding: 2% 2% 0;
+		padding: 2% 70px 0 2%;
 		color: $blue;
+		position: relative;
 	}
 }
 
@@ -74,24 +75,75 @@ path.foreground {
 	fill:$red;
 }
 
+svg.info-mark {
+	right:0;
+	position: absolute;
+	h2 & {
+		width: 24px;
+		right:24px;
+		top:30px;
+	}
+}
+
+.info-mark-background {
+	fill: $medium_gray;
+}
+.info-mark-foreground {
+	fill: #ffffff;
+}
+/*a.info-mark {
+	font-family: "Trade Gothic Pro Bold","Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
+    background: #fff;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: lightgray;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 144%;
+    position: relative;
+    bottom: 4px;
+    &.small {
+	    position: absolute;
+	    right: 0;
+	    font-size: 13px;
+	    width: 15px;
+	    height: 15px;
+	    line-height: 147%;
+	    text-indent: 1px;
+    }
+}
+*/
+
 .donut-div {
 	width: 200px;
 }
-div.bar-charts:first-of-type, #map {
+div.bar-charts, #map {
 	border-top: 1px solid $blue;
+}
+div.bar-charts {
+	padding-bottom:25px;
 }
 div.bar-chart {
 	position:relative;
 	margin: 2%;
 	width: 220px;
 	flex-grow: 1;
+	height:46px;
+	&.empty {
+		height: 0;
+		margin:0 2%;
+	}
+	
 	svg {
 		position: absolute;
 		line {
 			stroke-width: 2px;
 			&.foreground-line {
 				stroke: $red;
-			}
+			} 
 			&.background-line-gray {
 				stroke: $medium_gray;
 			}
@@ -107,6 +159,7 @@ div.bar-chart {
 	    padding: 0 1%;
 	    &.figure-title {
 	    	color: $blue;
+	    	padding-right:15px;
 	    }
 	    &.value {
 	    	top:10%;
@@ -136,4 +189,61 @@ div.bar-chart {
 
 .space-around {
 	justify-content: space-around;
+}
+
+/* d3-tip css TO DO  add as import or separate file */
+
+.d3-tip {
+    padding: 7px;
+    background: rgba(255,255,255,0.9);
+    color: $dark_gray;
+    opacity: 0;
+    transition: opacity 0.5s linear;
+    font-size: 75%;
+    line-height: 120%;
+    z-index: 9;
+    max-width: 180px;
+    border: 2px solid $blue;
+
+    &.label-tip {
+        border-radius: 10px;
+        padding: 4px 7px;
+    }
+    
+    &:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: $blue;
+        position: absolute;
+        pointer-events: none;
+    }
+    &.n:after {
+        content: "\25BC";
+        margin: -1px 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+    &.e:after {
+        content: "\25C0 \FE0E";
+        margin: -4px 0 0;
+        top: 50%;
+        left: -8px;
+    }
+    &.s:after {
+        content: "\25B2";
+        margin: 0 0 1px 0;
+        top: -8px;
+        left: 0;
+        text-align: center;
+    }
+    &.w:after {
+        content: "\25B6 \FE0E";
+        margin: -4px 0 0 -1px;
+        top: 50%;
+        left: 100%;
+    }
 }

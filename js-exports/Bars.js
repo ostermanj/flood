@@ -13,6 +13,7 @@ export const Bars = (function(){
 	        this.width = 100 - this.margin.left - this.margin.right;
 	        this.height = configObject.heightToWidth * 100 - this.margin.top - this.margin.bottom;
 	        this.title = configObject.title;
+	        this.infoMark = configObject.infoMark || false;
 	        this.comparator = configObject.comparator;
 	        this.truncateRight = configObject.truncateRight || false;
 	        this.backgroundColor = configObject.backgroundColor || 'gray';
@@ -29,6 +30,7 @@ export const Bars = (function(){
 	        d3.select(this.container)
 	        	.append('span')
 	        	.classed('figure-title', true)
+	        	.classed('has-info-mark', () => this.infoMark)
 	        	.text(this.title);
 
 	        this.svg = d3.select(this.container)

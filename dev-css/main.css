@@ -22,8 +22,9 @@ h1, h2, h3, h4, h5, h6 {
   background: #E2E3E4;
   margin-bottom: 0.78125em; }
   #map-feature h2 {
-    padding: 2% 2% 0;
-    color: #051839; }
+    padding: 2% 70px 0 2%;
+    color: #051839;
+    position: relative; }
 
 .responsive-container {
   position: relative;
@@ -43,17 +44,63 @@ path.background {
 path.foreground {
   fill: #990000; }
 
+svg.info-mark {
+  right: 0;
+  position: absolute; }
+  h2 svg.info-mark {
+    width: 24px;
+    right: 24px;
+    top: 30px; }
+
+.info-mark-background {
+  fill: #BCBEC0; }
+
+.info-mark-foreground {
+  fill: #ffffff; }
+
+/*a.info-mark {
+	font-family: "Trade Gothic Pro Bold","Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
+    background: #fff;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: lightgray;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 144%;
+    position: relative;
+    bottom: 4px;
+    &.small {
+	    position: absolute;
+	    right: 0;
+	    font-size: 13px;
+	    width: 15px;
+	    height: 15px;
+	    line-height: 147%;
+	    text-indent: 1px;
+    }
+}
+*/
 .donut-div {
   width: 200px; }
 
-div.bar-charts:first-of-type, #map {
+div.bar-charts, #map {
   border-top: 1px solid #051839; }
+
+div.bar-charts {
+  padding-bottom: 25px; }
 
 div.bar-chart {
   position: relative;
   margin: 2%;
   width: 220px;
-  flex-grow: 1; }
+  flex-grow: 1;
+  height: 46px; }
+  div.bar-chart.empty {
+    height: 0;
+    margin: 0 2%; }
   div.bar-chart svg {
     position: absolute; }
     div.bar-chart svg line {
@@ -70,7 +117,8 @@ div.bar-chart {
     display: block;
     padding: 0 1%; }
     div.bar-chart span.figure-title {
-      color: #051839; }
+      color: #051839;
+      padding-right: 15px; }
     div.bar-chart span.value {
       top: 10%; }
   div.bar-chart.overflow::after {
@@ -90,5 +138,52 @@ div.bar-chart {
 
 .space-around {
   justify-content: space-around; }
+
+/* d3-tip css TO DO  add as import or separate file */
+.d3-tip {
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #58585b;
+  opacity: 0;
+  transition: opacity 0.5s linear;
+  font-size: 75%;
+  line-height: 120%;
+  z-index: 9;
+  max-width: 180px;
+  border: 2px solid #051839; }
+  .d3-tip.label-tip {
+    border-radius: 10px;
+    padding: 4px 7px; }
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: #051839;
+    position: absolute;
+    pointer-events: none; }
+  .d3-tip.n:after {
+    content: "\25BC";
+    margin: -1px 0 0;
+    top: 100%;
+    left: 0;
+    text-align: center; }
+  .d3-tip.e:after {
+    content: "\25C0 \FE0E";
+    margin: -4px 0 0;
+    top: 50%;
+    left: -8px; }
+  .d3-tip.s:after {
+    content: "\25B2";
+    margin: 0 0 1px 0;
+    top: -8px;
+    left: 0;
+    text-align: center; }
+  .d3-tip.w:after {
+    content: "\25B6 \FE0E";
+    margin: -4px 0 0 -1px;
+    top: 50%;
+    left: 100%; }
 
 /*# sourceMappingURL=main.css.map */

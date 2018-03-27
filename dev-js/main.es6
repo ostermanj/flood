@@ -1,7 +1,8 @@
- /* exported Charts */
+ /* exported Charts, d3Tip */
  //import { Donuts } from '../js-exports/Donuts';
  import { Bars } from '../js-exports/Bars';
- //d3.tip = require('d3-tip');
+ import { d3Tip } from '../js-vendor/d3-tip';
+ 
  /* polyfills needed: Promise TO DO: OTHERS?
  */
 /*
@@ -28,10 +29,12 @@ window.theMap  = (function(){
     		d3.event.preventDefault();
     	});
     const mbHelper = require('mapbox-helper');
+   // d3.tip = require('d3-tip');
+    const tip = d3.tip().attr('class', 'd3-tip').direction('w').html(function(d) { console.log(this,d);return d[d3.select(this.parentNode.parentNode.parentNode).attr('id').replace('-','')]; });
    	const theCharts = [];
    
     var geojson;
-    var featurePropertiesById = new Map();
+    var featurePropertiesById = new Map(); 
     var gateCheck = 0;
     
     var theMap = new mapboxgl.Map({
@@ -147,7 +150,7 @@ window.theMap  = (function(){
 	              	"circle-color": [
 		                'match',
 		                ['get', 't_ded'],
-		                5, '#051839',
+		                5, '#0f439c',
 		                /* other */ '#990000'
 		            ],
 		            "circle-radius": {
@@ -165,7 +168,7 @@ window.theMap  = (function(){
 	              	"circle-color": [
 		                'match',
 		                ['get', 't_ded'],
-		                5, '#051839',
+		                5, '#0f439c',
 		                /* other */ '#990000'
 		            ],
 		            "circle-radius": {
@@ -285,6 +288,7 @@ window.theMap  = (function(){
 						left:1 
 					},
 					heightToWidth: 0.05,
+					infoMark:true,
 					container: '#deductible-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
@@ -347,6 +351,7 @@ window.theMap  = (function(){
 						
 						return this.zScores.min;
 					},
+					infoMark:true,
 					heightToWidth: 0.05,
 					container: '#value-bar',
 					data: geojson.features,
@@ -370,6 +375,7 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
+					infoMark:true,
 					zScores: calculateZScores('tcov',null,null,[]),
 					/*min(){
 						return d3.min(this.data, d => d.properties.tcov);
@@ -402,6 +408,7 @@ window.theMap  = (function(){
 						bottom:0,
 						left:1 
 					},
+					infoMark:true,
 					zScores: (function(){
 						var mean = d3.mean([...medianIncomes.values()]);
 						var sd = d3.deviation([...medianIncomes.values()]);
@@ -496,7 +503,61 @@ window.theMap  = (function(){
 				})
 
 			); // end push
-			gateCheck++;  
+			gateCheck++;
+			var information = {
+				mapfeature: 'This map represents new flood insurance policies initiated between June and December 2014. The analysis in the related paper revolves around the decision whether to pay more for a lower deductible.',
+				deductiblebar: 'The standard deductible is $5,000; anything less is consider a low deductible.',
+				valuebar: 'This calculation ignores extreme outliers (values above $20M) which are likely due to data errors; it also ignores overrepresented values of $250,000, the majority of which are likely due to reporting errors.',
+				incomebar: 'Median household income is a property of the census tract in which the policyholder resides. Each census tract with an associated policy in view is counted once.',
+				coveragebar: 'Flood coverage is limited to $250,000.'
+			};
+			var infoMarks = d3.selectAll('.has-info-mark')
+				.append('svg')
+				.datum(information)
+				.attr('width','12px')
+				.attr('viewBox', '0 0 12 12')
+				.attr('class','info-mark');
+				
+
+			infoMarks
+				.append('circle')
+				.attr('class', 'info-mark-background') 
+				.attr('cx',6)
+				.attr('cy',6)
+				.attr('r',6)
+				.call(tip)
+				.on('mouseenter', function(d){
+					console.log(d3.event);
+					tip.show.call(this,d);
+				})
+				.on('mouseleave', tip.hide);  
+
+			infoMarks
+				.append('path')
+				.attr('class','info-mark-foreground')
+				.attr('d', `M5.231,7.614V6.915c0-0.364,0.084-0.702,0.254-1.016c0.169-0.313,0.355-0.613,0.559-0.902
+							c0.203-0.287,0.39-0.564,0.559-0.831C6.772,3.9,6.857,3.631,6.857,3.36c0-0.195-0.081-0.357-0.242-0.489
+							C6.455,2.74,6.268,2.674,6.057,2.674c-0.153,0-0.288,0.034-0.407,0.102c-0.118,0.068-0.222,0.155-0.311,0.26
+							C5.25,3.142,5.177,3.261,5.117,3.392c-0.06,0.131-0.097,0.264-0.114,0.4l-1.46-0.407C3.704,2.75,4.008,2.261,4.457,1.919
+							c0.448-0.343,1.016-0.515,1.701-0.515c0.313,0,0.607,0.044,0.882,0.133C7.316,1.626,7.56,1.756,7.771,1.925
+							C7.982,2.095,8.15,2.306,8.272,2.56c0.123,0.254,0.185,0.546,0.185,0.876c0,0.423-0.096,0.785-0.286,1.085
+							c-0.191,0.301-0.4,0.586-0.629,0.857C7.314,5.65,7.104,5.923,6.914,6.198S6.628,6.789,6.628,7.144v0.47H5.231z M5.079,10.699V8.896
+							h1.752v1.803H5.079z`
+				);
+
+			/*d3.selectAll('.figure-title.has-info-mark')
+				.append('a')
+				.attr('title', function(){
+					return information[d3.select(this.parentNode.parentNode).attr('id').replace('-','')];
+				})
+				.attr('href','#')
+				.attr('class','info-mark small')
+				.text('?');
+			d3.selectAll('.info-mark')
+				.on('click',() => {
+					d3.event.preventDefault();
+				});*/
+
 			gate();
 			//addClusterLayers(rtn);
 			
