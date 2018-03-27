@@ -567,7 +567,7 @@ window.theMap  = (function(){
 				.append('g');
 
 			infoMarks
-				.call(tip)
+				.call(tip) 
 				.on('mouseenter', function(d){
 					console.log(d3.event);
 					tip.show.call(this,d);

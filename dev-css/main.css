@@ -44,6 +44,13 @@ p.warning {
     width: 100%;
     height: 100%; }
 
+.svg-wrapper {
+  position: relative;
+  padding-bottom: 5%;
+  height: 0; }
+  .svg-wrapper svg {
+    position: absolute; }
+
 #legend {
   font-size: 14px; }
   #legend > div {

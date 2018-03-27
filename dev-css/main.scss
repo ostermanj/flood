@@ -75,6 +75,15 @@ p.warning {
 	}
 }
 
+.svg-wrapper {
+	position: relative;
+	padding-bottom: 5%;
+	height: 0;
+	svg {
+		position: absolute;
+	}
+}
+
 #legend {
 	font-size: 14px;
 	> div {

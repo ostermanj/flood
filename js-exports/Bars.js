@@ -34,6 +34,8 @@ export const Bars = (function(){
 	        	.text(this.title);
 
 	        this.svg = d3.select(this.container)
+	        	.append('div')
+	        	.attr('class','svg-wrapper')
 	            .append('svg')
 	            .attr('width', '100%')
 	            .attr('xmlns','http://www.w3.org/2000/svg')
