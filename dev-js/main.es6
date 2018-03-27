@@ -294,6 +294,9 @@ window.theMap  = (function(){
 					container: '#deductible-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id)),
 							numberMatching = 0;
 						filteredData.forEach(each => {
@@ -307,6 +310,9 @@ window.theMap  = (function(){
 						 return inViewIDs.size;
 					},
 					textFunction(n,d){
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return `${d3.format(",")(n)} of ${d3.format(",")(d)} (${d3.format(".0%")(n / d)})`;
 					}
 				}),
@@ -327,6 +333,9 @@ window.theMap  = (function(){
 					container: '#premium-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
 							
 						return d3.mean(filteredData, d => d.properties.premZ);
@@ -335,7 +344,9 @@ window.theMap  = (function(){
 						 return this.zScores.max;
 					},
 					textFunction(n){ 
-						console.log(this.zScores);
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return '$' + d3.format(",.2f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				}),
@@ -358,6 +369,9 @@ window.theMap  = (function(){
 					container: '#value-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						var filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
 						return d3.mean(filteredData, d => d.properties.valueZ);
 					},
@@ -365,7 +379,9 @@ window.theMap  = (function(){
 						 return this.zScores.max;
 					},
 					textFunction(n){ 
-						console.log(this.zScores);
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) * 1000 ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				}),
@@ -390,6 +406,9 @@ window.theMap  = (function(){
 					container: '#coverage-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						this.filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
 						return d3.mean(this.filteredData, d => d.properties.tcovZ);
 					},
@@ -398,7 +417,9 @@ window.theMap  = (function(){
 					},
 					textFunction(n){ 
 						
-						//return '$' + d3.format(",.0f")(n);
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) * 1000 ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				}),
@@ -448,6 +469,9 @@ window.theMap  = (function(){
 					container: '#income-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						var representedTracts = new Set();
 						var medIncomeZArray = [];
 						inViewIDs.forEach(id => {
@@ -468,6 +492,9 @@ window.theMap  = (function(){
 						 return this.zScores.max;
 					},
 					textFunction(n){ 
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return '$' + d3.format(",.0f")(this.zScores.mean + this.zScores.sd * n ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				}),
@@ -491,6 +518,9 @@ window.theMap  = (function(){
 					container: '#marginal-bar',
 					data: geojson.features,
 					numerator(inViewIDs){
+						if ( inViewIDs.size === 0 ){
+							return this.min;
+						}
 						this.filteredData = this.data.filter(each => inViewIDs.has(each.properties.id));
 						return d3.mean(this.filteredData, d => d.properties.ddpZ);
 					},
@@ -499,7 +529,9 @@ window.theMap  = (function(){
 					},
 					textFunction(n){ 
 						
-						//return '$' + d3.format(",.0f")(n);
+						if (inViewIDs.size === 0){
+							return 'none in view';
+						}
 						return '$' + d3.format(",.0f")((this.zScores.mean + this.zScores.sd * n ) ) + ' (z = ' + d3.format(".2f")(n) + ')';
 					}
 				})
