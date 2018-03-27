@@ -54,7 +54,7 @@ window.theMap  = (function(){
     var theMap = new mapboxgl.Map({
 	    container: 'map',
 	    style: 'mapbox://styles/ostermanj/cjf03o37b3tve2rqp2inw6a1f',
-	    center: [-95.149351486459073, 37.98467337085599],
+	    center: [-96.6434921115092, 37.98467337085599],
 	    zoom: 3,
 	    maxBounds: [[-142.88705714746362, 16.058344948432406],[-51.9023017869731,55.76690067417138]],
 	    minZoom: 1.5,
@@ -569,10 +569,21 @@ window.theMap  = (function(){
 			infoMarks
 				.call(tip) 
 				.on('mouseenter', function(d){
-					console.log(d3.event);
+					
+					tip.show.call(this,d);
+				})
+				.on('click', function(d){
+					d3.event.stopPropagation();
 					tip.show.call(this,d);
 				})
 				.on('mouseleave', tip.hide);
+
+			d3.select('#map-feature')
+				.on('click', () => {
+					console.log('click');
+					d3.selectAll('.d3-tip')
+						.style('opacity',0);
+				});
 				
 
 			infoMarks

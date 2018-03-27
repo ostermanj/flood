@@ -46,7 +46,8 @@ p.warning {
 
 .svg-wrapper {
   position: relative;
-  min-height: 24px; }
+  min-height: 24px;
+  margin-bottom: 3px; }
   .svg-wrapper svg {
     position: absolute; }
 
