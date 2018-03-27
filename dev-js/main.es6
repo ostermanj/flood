@@ -445,6 +445,7 @@ window.theMap  = (function(){
 					},
 					infoMark:true,
 					zScores: (function(){
+						console.log(medianIncomes);
 						var mean = d3.mean([...medianIncomes.values()]);
 						var sd = d3.deviation([...medianIncomes.values()]);
 						var min,
