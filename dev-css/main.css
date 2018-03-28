@@ -139,7 +139,7 @@ div.bar-chart {
   margin: 15px 2%;
   width: 220px;
   flex-grow: 1;
-  min-height: 46px; }
+  min-height: 50px; }
   div.bar-chart.empty {
     min-height: 0;
     margin: 0 2%; }

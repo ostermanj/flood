@@ -20,18 +20,45 @@ to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
 */
 window.theMap  = (function(){   
 "use strict";
-	 function webgl_support() { 
-	   try{
-	    var canvas = document.createElement( 'canvas' ); 
-	    return !! window.WebGLRenderingContext && ( 
-	         canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
-	   }catch( e ) { return false; } 
-	 }
-	 console.log(webgl_support());
-	if ( webgl_support() == null ){
-		d3.select('#webgl-warning')
-			.classed('warning', true)
-			.text('Your device may not support the graphics this tool relies on; please try on another.');
+
+	function checkSupported(){
+
+		function webgl_support() { 
+		    try {
+			    var canvas = document.createElement( 'canvas' ); 
+			    return !! window.WebGLRenderingContext && ( 
+		         canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+		    } catch(e) {
+		    	return false;
+    	    } 
+		}
+
+		var problems = 0;
+		 
+		if ( webgl_support() == null ){
+			d3.select('#webgl-warning')
+				.classed('warning', true)
+				.append('li')
+				.text('Your device may not support the graphics this tool relies on; please try on another.');
+		}
+		if ( typeof Map !== 'function' || typeof Set !== 'function' ) {
+			problems++;
+			d3.select('#webgl-warning')
+				.classed('warning', true)
+				.append('li')
+				.text('Your browser is out of date and will have trouble loading this feature. We’re showing you an image instead. Please try another browser.');
+
+			d3.select('#webgl-warning')
+				.append('img')
+				.attr('src','assets/flood-insurance-policy.png');
+		}
+
+		return problems;
+		
+	}
+
+	if ( checkSupported() > 0 ) {
+		return;
 	}
 	//var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d; });
 	
@@ -152,13 +179,16 @@ window.theMap  = (function(){
 		return mbHelper.addSourceAndLayers.call(theMap,
 			{ // source
 				"name": "policy-points",
-		        "type": "geojson",
-		        "data": geojson
+		        //"type": "geojson",
+		        //"data": geojson
+		        "type": "vector",
+		        "url":"mapbox://ostermanj.63wez16h",
 			}, [ // layers
 				{ // layer one
 	            "id": "points",
 	            "type": "circle",
 	            "source": "policy-points",
+	            "source-layer":"policies",
 	            "maxzoom": sizeZoomThreshold,
 	            "paint": {
 	              	"circle-color": [
@@ -177,6 +207,7 @@ window.theMap  = (function(){
 	            "id": "points-data-driven",
 	            "type": "circle",
 	            "source": "policy-points",
+	            "source-layer": "policies",
 	            "minzoom": sizeZoomThreshold,
 	            "paint": {
 	              	"circle-color": [
