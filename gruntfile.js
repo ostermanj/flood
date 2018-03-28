@@ -59,7 +59,7 @@ module.exports = function(grunt){
         uglify: {
             options: {
               mangle: {
-                reserved: ['d3']
+                reserved: ['d3','mapboxgl']
               },
               compress: {
                 drop_console: true

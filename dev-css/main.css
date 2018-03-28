@@ -18,7 +18,7 @@ h1, h2, h3, h4, h5, h6 {
   .placeholder::after {
     content: 'placeholder'; }
 
-p.warning {
+p.warning, div.warning {
   font-weight: bold;
   border: 1px solid #990000;
   padding: 1%; }
