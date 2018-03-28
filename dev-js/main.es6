@@ -1,8 +1,8 @@
- /* exported Charts, d3Tip, MapPolyfill, PromisePolyfill */
+ /* exported Charts, d3Tip, MapValues */
  //import { Donuts } from '../js-exports/Donuts';
  import { Bars } from '../js-exports/Bars';
  import { d3Tip } from '../js-vendor/d3-tip';
- import { MapPolyfill, PromisePolyfill } from '../js-vendor/polyfills';
+ import { MapValues } from '../js-vendor/polyfills';
  
  /* polyfills needed: Promise TO DO: OTHERS?
  */
