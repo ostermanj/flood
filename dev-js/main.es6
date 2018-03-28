@@ -94,6 +94,7 @@ window.theMap  = (function(){
 	var medianIncomes = new Map();
 	toGeoJSON('policies.csv');
 	theMap.on('load', function(){
+		addUnclustered();
 		gateCheck++;
 		gate();
 	});
@@ -102,7 +103,6 @@ window.theMap  = (function(){
 			return;
 		}
 		updateAll();
-		addUnclustered();
 		addClustered();
 		//calculateZScores('prem');
 	} // end gate
