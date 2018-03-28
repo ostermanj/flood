@@ -2,7 +2,7 @@
  //import { Donuts } from '../js-exports/Donuts';
  import { Bars } from '../js-exports/Bars';
  import { d3Tip } from '../js-vendor/d3-tip';
- import { MapValues, PromisePolyfill } from '../js-vendor/polyfills';
+ //import { MapValues, PromisePolyfill } from '../js-vendor/polyfills';
  
  /* polyfills needed: Promise TO DO: OTHERS?
  */
