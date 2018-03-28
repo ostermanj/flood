@@ -92,12 +92,12 @@ window.theMap  = (function(){
 	theMap.addControl(nav, 'top-right');
 
 	var medianIncomes = new Map();
-	toGeoJSON('policies.csv');
 	theMap.on('load', function(){
 		addUnclustered();
 		gateCheck++;
 		gate();
 	});
+	toGeoJSON('policies.csv');
 	function gate(){
 		if ( gateCheck < 2 ){
 			return;
