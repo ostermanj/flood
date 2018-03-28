@@ -17,7 +17,7 @@ import { createResultItem } from '../js-exports/ResultItems';
 to do : see also https://www.mapbox.com/mapbox-gl-js/example/heatmap-layer/
  
 
-*/
+*/ 
 window.theMap  = (function(){   
 "use strict";
 
