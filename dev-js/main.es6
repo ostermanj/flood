@@ -301,6 +301,8 @@ window.theMap  = (function(){
 				"type": "FeatureCollection",
 				"features": features
 			};
+			d3.select('div.bar-charts')
+				.classed('load', false);
 			theCharts.push( // should be able to create charts now, whether or not map has loaded. map needs to have
 							// loaded for them to update, though.
 				new Bars.Bar({ 

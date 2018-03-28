@@ -32,6 +32,10 @@ p.warning {
     position: relative;
     margin-bottom: 0; }
 
+.load {
+  background: url(../assets/spinner.svg) no-repeat 50% 50%;
+  background-size: 200px; }
+
 .responsive-container {
   position: relative;
   padding-bottom: 50.25%;

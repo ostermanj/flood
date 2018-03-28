@@ -23,13 +23,15 @@
   */
 
 export const MapValues = (function(){
-  Map.prototype.values = Map.prototype.values || function(){
-    var array = [];
-    this.forEach(function(each){
-      array.push(each);
-    });
-    return array;
-  };
+  if ( typeof Map !== "undefined" ) {
+    Map.prototype.values = Map.prototype.values || function(){
+      var array = [];
+      this.forEach(function(each){
+        array.push(each);
+      });
+      return array;
+    };
+  }
 })();
 
 /**
