@@ -50,7 +50,7 @@ window.theMap  = (function(){
 
 			d3.select('#webgl-warning')
 				.append('img')
-				.attr('src','assets/flood-insurance-policy.png');
+				.attr('src','assets/flood-insurance-policy-map.png');
 		}
 
 		return problems;
