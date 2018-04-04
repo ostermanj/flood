@@ -17,7 +17,7 @@ $secondary_3: #cc9966;
 $secondary_4: lighten(#330000, 20%);
 $secondary_5: light(#336633, 20%);
 
-/* Overides not necessary on production */
+/* Overides not necessary on production 
  
 html {
 	font-family: calluna, "Calluna W01",Georgia,"Times New Roman","DejaVu Serif",serif;
@@ -35,16 +35,16 @@ h1, h2, h3, h4, h5, h6 {
 	display: none;
 }
 
-/* end*/
-
 .placeholder {
 	border: 1px solid cyan;
 	&::after {
 		content: 'placeholder';
 	}
 }
+/* end*/
 
-p.warning, div.warning {
+
+p.warning, div.waring {
 	font-weight: bold;
     border: 1px solid $red;
     padding: 1%;

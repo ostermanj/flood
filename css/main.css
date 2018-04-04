@@ -28,88 +28,75 @@ p.warning, div.waring {
   font-weight: bold;
   border: 1px solid #990000;
   padding: 1%; }
-
 #map-feature {
   background: #E2E3E4 url("../assets/logo.svg") no-repeat 98% 99%;
   margin-bottom: 0.78125em; }
-  #map-feature h2 {
+#map-feature h2 {
     padding: 2% 70px 0 2%;
     color: #051839;
     position: relative;
     margin-bottom: 0; }
-
 .load {
   background: url(../assets/spinner.svg) no-repeat 50% 50%;
   background-size: 200px; }
-
 .responsive-container {
   position: relative;
   padding-bottom: 50.25%;
   height: 0;
   overflow: hidden; }
-  .responsive-container > div {
+.responsive-container > div {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%; }
-
 .svg-wrapper {
   position: relative;
   min-height: 24px;
   margin-bottom: 3px; }
-  .svg-wrapper svg {
+.svg-wrapper svg {
     position: absolute; }
-
 #legend {
   font-size: 14px; }
-  #legend > div {
+#legend > div {
     margin: 0 2%; }
-  #legend span {
+#legend span {
     margin-right: 10px; }
-
 #size-legend {
   opacity: 0;
   max-height: 0;
   transition: opacity 0.2s linear, max-height 0.2s linear; }
-  #size-legend.show {
+#size-legend.show {
     opacity: 1;
     max-height: 100px; }
-
 div.circle {
   width: 8px;
   height: 8px;
   border-radius: 6px;
   opacity: 0.5;
   display: inline-block; }
-  div.circle.red {
+div.circle.red {
     background-color: #990000; }
-  div.circle.blue {
+div.circle.blue {
     background-color: #0f439c; }
-  div.circle.white {
+div.circle.white {
     border: 1px solid white;
     opacity: 1; }
-
 path.background {
   fill: #051839; }
-
 path.foreground {
   fill: #990000; }
-
 svg.info-mark {
   right: 0;
   position: absolute; }
-  h2 svg.info-mark {
+h2 svg.info-mark {
     width: 24px;
     right: 24px;
     top: 30px; }
-
 .info-mark-background {
   fill: #BCBEC0; }
-
 .info-mark-foreground {
   fill: #ffffff; }
-
 /*a.info-mark {
 	font-family: "Trade Gothic Pro Bold","Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
     background: #fff;
@@ -137,61 +124,59 @@ svg.info-mark {
 */
 .donut-div {
   width: 200px; }
-
 div.bar-charts, #map {
   border-top: 1px solid #051839; }
-
 div.bar-charts {
   padding-bottom: 25px; }
-
 div.bar-chart {
   position: relative;
   margin: 15px 2%;
   width: 220px;
-  flex-grow: 1;
+  -ms-flex-positive: 1;
+      flex-grow: 1;
   min-height: 50px; }
-  div.bar-chart.empty {
+div.bar-chart.empty {
     min-height: 0;
     margin: 0 2%; }
-  div.bar-chart svg {
+div.bar-chart svg {
     position: absolute; }
-    div.bar-chart svg line {
+div.bar-chart svg line {
       stroke-width: 2px; }
-      div.bar-chart svg line.foreground-line {
+div.bar-chart svg line.foreground-line {
         stroke: #990000; }
-      div.bar-chart svg line.background-line-gray {
+div.bar-chart svg line.background-line-gray {
         stroke: #BCBEC0; }
-      div.bar-chart svg line.background-line-blue {
+div.bar-chart svg line.background-line-blue {
         stroke: #bfccd7; }
-  div.bar-chart span {
+div.bar-chart span {
     position: relative;
     font-size: 14px;
     display: block;
     padding: 0 1%; }
-    div.bar-chart span.figure-title {
+div.bar-chart span.figure-title {
       color: #051839;
       padding-right: 15px; }
-    div.bar-chart span.value {
+div.bar-chart span.value {
       bottom: 0;
       position: absolute; }
-  div.bar-chart.overflow::after {
+div.bar-chart.overflow::after {
     content: '+';
     position: absolute;
     top: 0;
     right: 1%;
     color: #990000; }
-
 /* flex */
 .flex {
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap; }
-
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
 .space-between {
-  justify-content: space-between; }
-
+  -ms-flex-pack: justify;
+      justify-content: space-between; }
 .space-around {
-  justify-content: space-around; }
-
+  -ms-flex-pack: distribute;
+      justify-content: space-around; }
 /* d3-tip css TO DO  add as import or separate file */
 .d3-tip {
   padding: 7px;
@@ -204,10 +189,10 @@ div.bar-chart {
   z-index: 9;
   max-width: 180px;
   border: 2px solid #051839; }
-  .d3-tip.label-tip {
+.d3-tip.label-tip {
     border-radius: 10px;
     padding: 4px 7px; }
-  .d3-tip:after {
+.d3-tip:after {
     box-sizing: border-box;
     display: inline;
     font-size: 10px;
@@ -216,27 +201,25 @@ div.bar-chart {
     color: #051839;
     position: absolute;
     pointer-events: none; }
-  .d3-tip.n:after {
+.d3-tip.n:after {
     content: "\25BC";
     margin: -1px 0 0;
     top: 100%;
     left: 0;
     text-align: center; }
-  .d3-tip.e:after {
+.d3-tip.e:after {
     content: "\25C0 \FE0E";
     margin: -4px 0 0;
     top: 50%;
     left: -8px; }
-  .d3-tip.s:after {
+.d3-tip.s:after {
     content: "\25B2";
     margin: 0 0 1px 0;
     top: -8px;
     left: 0;
     text-align: center; }
-  .d3-tip.w:after {
+.d3-tip.w:after {
     content: "\25B6 \FE0E";
     margin: -4px 0 0 -1px;
     top: 50%;
     left: 100%; }
-
-/*# sourceMappingURL=main.css.map */
