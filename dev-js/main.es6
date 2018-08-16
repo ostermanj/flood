@@ -3,6 +3,7 @@
  import { Bars } from '../js-exports/Bars';
  import { d3Tip } from '../js-vendor/d3-tip';
  import { MapValues } from '../js-vendor/polyfills';
+ import policies from './../policies.json';
  
  /* polyfills needed: Promise TO DO: OTHERS?
  */
@@ -97,7 +98,8 @@ window.theMap  = (function(){
 		gateCheck++;
 		gate();
 	});
-	toGeoJSON('policies.csv');
+	console.log(policies);
+	toGeoJSON(policies);
 	function gate(){
 		if ( gateCheck < 2 ){
 			return;
@@ -265,13 +267,7 @@ window.theMap  = (function(){
 	        ] // end layers array
 	    ); // end addlayers
 	} // end addClustered
-	function toGeoJSON(url){
-		
-		d3.csv(url, function(err, data){
-			if (err) {
-				throw err;
-			}
-			//console.log(data);
+	function toGeoJSON(data){
 			var features = []; 
 			data.forEach(each => {
 
@@ -656,7 +652,6 @@ window.theMap  = (function(){
 			gate();
 			//addClusterLayers(rtn);
 			
-		}); // end d3 csv
 	} // end toGeoJSON
 	/*var featuresInView = {
 		render(){
