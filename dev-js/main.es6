@@ -97,7 +97,7 @@ window.theMap  = (function(){
 		gateCheck++;
 		gate();
 	});
-	toGeoJSON('http://www.rff.org/files/policies.csv');
+	toGeoJSON('policies.csv');
 	function gate(){
 		if ( gateCheck < 2 ){
 			return;
