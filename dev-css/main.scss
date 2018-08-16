@@ -1,0 +1,309 @@
+/* colors */
+$dark_gray: #58585b;
+$a11y_gray: #767676;
+$light_gray: #E2E3E4;
+$medium_gray: #BCBEC0;
+$blue: #051839;
+$bright_blue: #0f439c;
+$green: #346633;
+$gold: #c7922b;
+$teal: #4f8190;
+$light_blue: #bfccd7;
+$red: #990000;
+
+$secondary_1: darken(#99ccff, 10%);
+$secondary_2: darken(#ccffcc, 55%);
+$secondary_3: #cc9966;
+$secondary_4: lighten(#330000, 20%);
+$secondary_5: light(#336633, 20%);
+
+/* Overides not necessary on production 
+ 
+html {
+	font-family: calluna, "Calluna W01",Georgia,"Times New Roman","DejaVu Serif",serif;
+}
+
+.list-item__tags a, .list-item__tag, .tags-list li a, .tag--rail, .subtopics-list__item a, .tag, h1, h2, h3, h4, h5, h6, label, .button--secondary-full, .button--tertiary-full, .button--full, .button--secondary-small, .button--tertiary-small, .list-filter .views-submit-button input[type="submit"], .list-filter__button input[type="submit"], .button--small, .button--secondary, .button--tertiary, button, .button--quarternary, .form-submit, .search-form input[type="submit"], .button, .tabs-primary__tab, .download-label--pdf, .download-label--link, .download-label--img, .download-label, .hero__label--blog, .hero__label--work, .hero__label--media-highlights, .hero__label, .label--work, .label--publication, .label--publications, .label--press-release, .label--press-releases, .label--blog-post, .label--blog-posts, .label--event, .label--magazine, .list-item__label, .list-item--work__label, .list-item--publication__label, .list-item--publications__label, .list-item--collection__label, .list-item--blog-post__label, .list-item--blog-posts__label, .list-item--event__label, .list-item--magazine__label, .list-item--resources-magazine__label, .label, .list-filter, .list-filter--rail, .researcher-list-item__subtitle, .issue-meta, .media-highlight__title, .nav__list-item, .nav-mega .menu li a:link, .nav-mega__list li a:link, .nav-mega .menu li a:visited, .nav-mega__list li a:visited, .mega-summary__contact-info, .mega-summary__phone, .summary__social, .mobile-nav__trigger, .mobile-nav .nav-mega, .mobile-nav__list-item-link, .nav--rail, .pagination, .rail--magazine__issue, .rail--magazine__list li, .social-list--header li, .social-list li, .social-label, .rss-feed, .topics-rss-feed, .collections-list li, .topics-navigation__list, .work-callout__number, .work--meta__title, .work--meta__collection {
+	font-family: "Trade Gothic Pro Roman", "TradeGothic LT", "Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Trade Gothic Pro Bold",	
+} 
+
+#mfPreviewBar {
+	display: none;
+}
+
+.placeholder {
+	border: 1px solid cyan;
+	&::after {
+		content: 'placeholder';
+	}
+}
+/* end*/
+
+
+p.warning, div.waring {
+	font-weight: bold;
+    border: 1px solid $red;
+    padding: 1%;
+}
+
+#map-feature {
+	background: $light_gray url(http://www.rff.org/files/logo.svg) no-repeat 98% 99%;
+	margin-bottom: 0.78125em;
+	h2 {
+		padding: 2% 70px 0 2%;
+		color: $blue;
+		position: relative;
+		margin-bottom: 0;
+	}
+}
+
+.load {
+    background: url(http://www.rff.org/files/spinner.svg) no-repeat 50% 50%;
+    background-size: 200px;
+}
+
+.responsive-container {
+	position: relative;
+	padding-bottom: 50.25%;
+	height: 0;
+	overflow: hidden;
+	> div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.svg-wrapper {
+	position: relative;
+	min-height: 24px;
+	margin-bottom: 3px;
+	svg {
+		position: absolute;
+	}
+}
+
+#legend {
+	font-size: 14px;
+	> div {
+		margin: 0 2%;
+	}
+	span {
+		margin-right:10px;
+	}
+}
+#size-legend {
+	opacity: 0;
+	max-height: 0;
+	transition: opacity 0.2s linear, max-height 0.2s linear;
+	&.show {
+		opacity: 1;
+		max-height: 100px
+	}
+}
+
+div.circle {
+	width:8px;
+	height:8px;
+	border-radius:6px;
+	opacity: 0.5;
+	display: inline-block;
+	&.red {
+		background-color: $red;
+	}
+	&.blue {
+		background-color: $bright_blue;
+	}
+	&.white {
+		border: 1px solid white;
+		opacity: 1;
+	}
+}
+
+path.background {
+	fill: $blue;
+}
+
+path.foreground {
+	fill:$red;
+}
+
+svg.info-mark {
+	right:0;
+	position: absolute;
+	h2 & {
+		width: 24px;
+		right:24px;
+		top:30px;
+	}
+}
+
+.info-mark-background {
+	fill: $medium_gray;
+}
+.info-mark-foreground {
+	fill: #ffffff;
+}
+/*a.info-mark {
+	font-family: "Trade Gothic Pro Bold","Trade Gothic W01",Helvetica,Arial,"Nimbus Sans L",sans-serif;
+    background: #fff;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: lightgray;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 144%;
+    position: relative;
+    bottom: 4px;
+    &.small {
+	    position: absolute;
+	    right: 0;
+	    font-size: 13px;
+	    width: 15px;
+	    height: 15px;
+	    line-height: 147%;
+	    text-indent: 1px;
+    }
+}
+*/
+
+.donut-div {
+	width: 200px;
+}
+div.bar-charts, #map {
+	border-top: 1px solid $blue;
+}
+div.bar-charts {
+	padding-bottom:25px;
+}
+div.bar-chart {
+	position:relative;
+	margin: 15px 2%;
+	width: 220px;
+	flex-grow: 1;
+	min-height:50px;
+	&.empty {
+		min-height: 0;
+		margin:0 2%;
+	}
+	
+	svg {
+		position: absolute;
+		line {
+			stroke-width: 2px;
+			&.foreground-line {
+				stroke: $red;
+			} 
+			&.background-line-gray {
+				stroke: $medium_gray;
+			}
+			&.background-line-blue {
+				stroke: $light_blue;
+			}
+		}
+	}
+	span {
+		position: relative;
+	    font-size: 14px;
+	    display: block;
+	    padding: 0 1%;
+	    &.figure-title {
+	    	color: $blue;
+	    	padding-right:15px;
+	    }
+	    &.value {
+	    	bottom:0;
+	    	position: absolute;
+	    }
+	    
+	}
+	&.overflow::after {
+		content: '+';
+	    position: absolute;
+	    top: 0;
+	    right: 1%;
+	    color: $red;
+	}
+}
+
+
+/* flex */
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.space-between {
+	justify-content: space-between;
+}
+
+.space-around {
+	justify-content: space-around;
+}
+
+/* d3-tip css TO DO  add as import or separate file */
+
+.d3-tip {
+    padding: 7px;
+    background: rgba(255,255,255,0.9);
+    color: $dark_gray;
+    opacity: 0;
+    transition: opacity 0.5s linear;
+    font-size: 75%;
+    line-height: 120%;
+    z-index: 9;
+    max-width: 180px;
+    border: 2px solid $blue;
+
+    &.label-tip {
+        border-radius: 10px;
+        padding: 4px 7px;
+    }
+    
+    &:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: $blue;
+        position: absolute;
+        pointer-events: none;
+    }
+    &.n:after {
+        content: "\25BC";
+        margin: -1px 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+    &.e:after {
+        content: "\25C0 \FE0E";
+        margin: -4px 0 0;
+        top: 50%;
+        left: -8px;
+    }
+    &.s:after {
+        content: "\25B2";
+        margin: 0 0 1px 0;
+        top: -8px;
+        left: 0;
+        text-align: center;
+    }
+    &.w:after {
+        content: "\25B6 \FE0E";
+        margin: -4px 0 0 -1px;
+        top: 50%;
+        left: 100%;
+    }
+}
