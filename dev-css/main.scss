@@ -51,7 +51,7 @@ p.warning, div.waring {
 }
 
 #map-feature {
-	background: $light_gray url('../assets/logo.svg') no-repeat 98% 99%;
+	background: $light_gray url(http://www.rff.org/files/logo.svg) no-repeat 98% 99%;
 	margin-bottom: 0.78125em;
 	h2 {
 		padding: 2% 70px 0 2%;
@@ -62,7 +62,7 @@ p.warning, div.waring {
 }
 
 .load {
-    background: url(../assets/spinner.svg) no-repeat 50% 50%;
+    background: url(http://www.rff.org/files/spinner.svg) no-repeat 50% 50%;
     background-size: 200px;
 }
 

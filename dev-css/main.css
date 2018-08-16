@@ -30,7 +30,7 @@ p.warning, div.waring {
   padding: 1%; }
 
 #map-feature {
-  background: #E2E3E4 url("../assets/logo.svg") no-repeat 98% 99%;
+  background: #E2E3E4 url(http://www.rff.org/files/logo.svg) no-repeat 98% 99%;
   margin-bottom: 0.78125em; }
   #map-feature h2 {
     padding: 2% 70px 0 2%;
@@ -39,7 +39,7 @@ p.warning, div.waring {
     margin-bottom: 0; }
 
 .load {
-  background: url(../assets/spinner.svg) no-repeat 50% 50%;
+  background: url(http://www.rff.org/files/spinner.svg) no-repeat 50% 50%;
   background-size: 200px; }
 
 .responsive-container {
